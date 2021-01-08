@@ -1,0 +1,212 @@
+
+import ta_dellemc_vmax_declare
+
+from splunktaucclib.rest_handler.endpoint import (
+    field,
+    validator,
+    RestModel,
+    DataInputModel,
+)
+from splunktaucclib.rest_handler import admin_external, util
+from splunk_aoblib.rest_migration import ConfigMigrationHandler
+
+util.remove_http_proxy_env_vars()
+
+
+fields = [
+    field.RestField(
+        'interval',
+        required=True,
+        encrypted=False,
+        default=None,
+        validator=validator.Pattern(
+            regex=r"""^\-[1-9]\d*$|^\d*$""", 
+        )
+    ), 
+    field.RestField(
+        'index',
+        required=True,
+        encrypted=False,
+        default='default',
+        validator=validator.String(
+            min_len=1, 
+            max_len=80, 
+        )
+    ), 
+    field.RestField(
+        'u4v_ip_address',
+        required=True,
+        encrypted=False,
+        default=None,
+        validator=validator.String(
+            min_len=0, 
+            max_len=8192, 
+        )
+    ), 
+    field.RestField(
+        'u4v_port',
+        required=True,
+        encrypted=False,
+        default='8443',
+        validator=validator.String(
+            min_len=0, 
+            max_len=8192, 
+        )
+    ), 
+    field.RestField(
+        'u4v_username',
+        required=True,
+        encrypted=False,
+        default=None,
+        validator=validator.String(
+            min_len=0, 
+            max_len=8192, 
+        )
+    ), 
+    field.RestField(
+        'u4v_password',
+        required=True,
+        encrypted=True,
+        default=None,
+        validator=validator.String(
+            min_len=0, 
+            max_len=8192, 
+        )
+    ), 
+    field.RestField(
+        'u4v_vmax_id',
+        required=True,
+        encrypted=False,
+        default=None,
+        validator=validator.String(
+            min_len=0, 
+            max_len=8192, 
+        )
+    ), 
+    field.RestField(
+        'enable_ssl',
+        required=False,
+        encrypted=False,
+        default=True,
+        validator=None
+    ), 
+    field.RestField(
+        'ssl_cert_location',
+        required=False,
+        encrypted=False,
+        default=None,
+        validator=validator.String(
+            min_len=0, 
+            max_len=8192, 
+        )
+    ), 
+    field.RestField(
+        'rest_request_timeout',
+        required=False,
+        encrypted=False,
+        default='60',
+        validator=validator.String(
+            min_len=0, 
+            max_len=8192, 
+        )
+    ), 
+    field.RestField(
+        'select_array',
+        required=False,
+        encrypted=False,
+        default=True,
+        validator=None
+    ), 
+    field.RestField(
+        'select_alerts',
+        required=False,
+        encrypted=False,
+        default=True,
+        validator=None
+    ), 
+    field.RestField(
+        'select_vmax_only_metrics',
+        required=False,
+        encrypted=False,
+        default=None,
+        validator=None
+    ), 
+    field.RestField(
+        'select_srp',
+        required=False,
+        encrypted=False,
+        default=True,
+        validator=None
+    ), 
+    field.RestField(
+        'select_sg',
+        required=False,
+        encrypted=False,
+        default=True,
+        validator=None
+    ), 
+    field.RestField(
+        'select_director',
+        required=False,
+        encrypted=False,
+        default=True,
+        validator=None
+    ), 
+    field.RestField(
+        'select_port',
+        required=False,
+        encrypted=False,
+        default=True,
+        validator=None
+    ), 
+    field.RestField(
+        'select_pg',
+        required=False,
+        encrypted=False,
+        default=True,
+        validator=None
+    ), 
+    field.RestField(
+        'select_host',
+        required=False,
+        encrypted=False,
+        default=True,
+        validator=None
+    ), 
+    field.RestField(
+        'select_initiator',
+        required=False,
+        encrypted=False,
+        default=True,
+        validator=None
+    ), 
+    field.RestField(
+        'select_wlp',
+        required=False,
+        encrypted=False,
+        default=True,
+        validator=None
+    ), 
+
+    field.RestField(
+        'disabled',
+        required=False,
+        validator=None
+    )
+
+]
+model = RestModel(fields, name=None)
+
+
+
+endpoint = DataInputModel(
+    'inputs',
+    model,
+)
+
+
+if __name__ == '__main__':
+    admin_external.handle(
+        endpoint,
+        handler=ConfigMigrationHandler,
+    )

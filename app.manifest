@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0.0",
+  "info": {
+    "title": "Dell EMC VMAX Add-on for Splunk Enterprise",
+    "id": {
+      "group": null,
+      "name": "TA-DellEMC_VMAX",
+      "version": "2.0.9"
+    },
+    "author": [
+      {
+        "name": "Michael McAleer",
+        "email": "vmax.splunk.support@emc.com",
+        "company": "Dell EMC"
+      }
+    ],
+    "releaseDate": "September 2020",
+    "description": "REST API based input for polling summary & performance data from Dell EMC VMAX storage arrays.",
+    "classification": {
+      "intendedAudience": null,
+      "categories": [],
+      "developmentStatus": null
+    },
+    "commonInformationModels": null,
+    "license": {
+      "name": null,
+      "text": null,
+      "uri": null
+    },
+    "privacyPolicy": {
+      "name": null,
+      "text": null,
+      "uri": null
+    },
+    "releaseNotes": {
+      "name": null,
+      "text": null,
+      "uri": null
+    }
+  },
+  "dependencies": {
+  },
+  "tasks": [],
+  "inputGroups": {
+  },
+  "incompatibleApps": {
+  },
+  "platformRequirements": {
+    "splunk": {
+      "Enterprise": "*"
+    }
+  }
+}

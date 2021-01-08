@@ -1,0 +1,20 @@
+[inputs://<name>]
+u4v_ip_address = 
+u4v_port = Unisphere default port is 8443
+u4v_username = 
+u4v_password = 
+u4v_vmax_id = This is the 12-digit array ID
+enable_ssl = Enable SSL communication between Splunk and Unisphere
+ssl_cert_location = (Optional) Leave this blank if the Unisphere SSL certificate is loaded into the system, otherwise you can specify the direct path to the .pem certificate
+rest_request_timeout = (Optional) Default REST request timeout value, default is 60 seconds, for more information please consult the TA user guide
+select_array = Collect Array level information
+select_alerts = Collect system & array alerts
+select_vmax_only_metrics = Select this option to collect only those alerts which relate to the specified VMAX ID, for more information please consult the TA user guide.
+select_srp = Collect SRP level information
+select_sg = Collect SG level information
+select_director = Collect Director level information
+select_port = Collect Port level information
+select_pg = Collect PG level information
+select_host = Collect Host level information
+select_initiator = Collect Initiator level information
+select_wlp = Collect WLP level information
