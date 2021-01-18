@@ -1,0 +1,5 @@
+The README directory is a requirement for Splunk add-on validation before
+publishing.  There is no documentation in this directory.
+
+For directions to the official documentation, please consult README.rst file
+in the TA root directory.
