@@ -1,3 +1,7 @@
+PowerMax for Splunk 3.1 - 20th May 2022
+============================================
+- Upgrade TA to jQuery 3.5.
+
 PowerMax for Splunk 3.0 - 15th February 2021
 ============================================
 - New categories have been added:

@@ -31,45 +31,9 @@ for both code can be viewed and downloaded from the links below:
 - `Dell EMC PowerMax App for Splunk Enterprise source`_
 
 
-What's New in PowerMax for Splunk 3.0
+What's New in PowerMax for Splunk 3.1
 -------------------------------------
-- New categories have been added:
-
-    - Masking View
-    - IP Interface
-    - iSCSI Target
-    - Snapshot Policies
-    - RDF Groups
-    - Metro DR
-    - Audit Logs
-
-- The TA has been completely overhauled to integrate PyU4V to provide all
-  required Unisphere for PowerMax REST API functionality.
-- Users can now specify if they want to collect all metrics, key-performance
-  indicator (KPI) metrics, or a custom set of metrics for each supported
-  category in the PowerMax for Splunk TA.
-- The now retired VMAX for Splunk sizer has been removed as a standalone
-  script from the PowerMax for Splunk TA in favour of integrating its
-  functionality directly into the TA. Now when a collection run exceeds the
-  interval set for a given data input a warning message will appear in the
-  logs along with a recommended interval to set.
-- The TA has multiple code efficiency improvements to move to hash lookups over
-  list iterations and use dictionaries and sets over lists where possible.
-- The TA now has a full suite of unit tests and CI tests with full coverage of
-  all code to improve reliability of submitted code and any future fixes.
-- The TA now conforms to PEP8 and PyLint industry Python coding standards.
-- The App has been redesigned so it will run entirely on KPI metrics. This is
-  to cut down on the amount of data ingested into Splunk without impacting the
-  functionality of the front end app.
-- The App dashboard filter parameters are now bi-directional, they can be
-  selected in any order and all other filter options will update accordingly to
-  keep searches valid for your environment.
-- The App dashboard charts have been set to use logarithmic scale on the y-axis
-  instead of linear, this allows for better visualisation of results when there
-  is a wide range on the y-axis.
-- Documentation has had a complete redesign and is now also hosted on
-  readthedocs.io.
-
+- Upgrade TA to jQuery 3.5.
 
 Contact
 -------

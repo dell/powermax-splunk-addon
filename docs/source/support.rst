@@ -87,5 +87,5 @@ information as possible about the problem including:
 .. _`Dell GitHub`: https://github.com/dell
 .. _`PowerMax Add-on for Splunk Issues`: https://github.com/dell/powermax-splunk-addon/issues
 .. _`PowerMax App for Splunk Issues`: https://github.com/dell/powermax-splunk-app/issues
-.. _`PowerMax Add-on for Splunk Discussion`: https://github.com/dell/powermax-splunk-addon/discussions
-.. _`PowerMax App for Splunk Discussion`: https://github.com/dell/powermax-splunk-app/discussions
+.. _`PowerMax Add-on for Splunk Discussion`: https://github.com/dell/powermax-splunk-addon/discussion
+.. _`PowerMax App for Splunk Discussion`: https://github.com/dell/powermax-splunk-app/discussion

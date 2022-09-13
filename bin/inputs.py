@@ -1,15 +1,16 @@
 """bin/inputs.py"""
+import ta_dellemc_vmax_declare
 
-import json
 import os
 import sys
-
-import ta_dellemc_vmax_declare  # NOQA
+import time
+import datetime
+import json
 
 import modinput_wrapper.base_modinput
-import powermax_splunk_core.driver.powermax_input_module as input_module
+from splunklib import modularinput as smi
 
-from solnlib.packages.splunklib import modularinput as smi
+import powermax_splunk_core.driver.powermax_input_module as input_module
 
 bin_dir = os.path.basename(__file__)
 

@@ -5,16 +5,16 @@
     "id": {
       "group": null,
       "name": "TA-DellEMC_VMAX",
-      "version": "3.0.0"
+      "version": "3.1.0"
     },
     "author": [
       {
-        "name": "Michael McAleer",
+        "name": "Philip Sheehan",
         "email": "vmax.splunk.support@emc.com",
         "company": "Dell EMC"
       }
     ],
-    "releaseDate": "January 2020",
+    "releaseDate": "August 2022",
     "description": "REST API based input for polling summary & performance data from Dell EMC PowerMax storage arrays.",
     "classification": {
       "intendedAudience": null,
