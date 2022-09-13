@@ -1,0 +1,1142 @@
+{
+    "meta": {
+        "name": "TA-DellEMC_VMAX",
+        "displayName": "Dell EMC PowerMax Add-on for Splunk Enterprise",
+        "version": "3.1.0",
+        "restRoot": "TA_DellEMC_VMAX",
+        "schemaVersion": "0.0.3"
+    },
+    "pages": {
+        "configuration": {
+            "title": "Configuration",
+            "description": "Set up your add-on",
+            "tabs": [
+                {
+                    "name": "logging",
+                    "title": "Logging",
+                    "entity": [
+                        {
+                            "field": "loglevel",
+                            "label": "Log level",
+                            "type": "singleSelect",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "label": "DEBUG",
+                                        "value": "DEBUG"
+                                    },
+                                    {
+                                        "label": "INFO",
+                                        "value": "INFO"
+                                    },
+                                    {
+                                        "label": "WARNING",
+                                        "value": "WARNING"
+                                    },
+                                    {
+                                        "label": "ERROR",
+                                        "value": "ERROR"
+                                    },
+                                    {
+                                        "label": "CRITICAL",
+                                        "value": "CRITICAL"
+                                    }
+                                ]
+                            },
+                            "defaultValue": "INFO"
+                        }
+                    ]
+                }
+            ]
+        },
+        "inputs": {
+            "title": "Inputs",
+            "description": "Manage your data inputs",
+            "table": {
+                "header": [
+                    {
+                        "field": "name",
+                        "label": "Name"
+                    },
+                    {
+                        "field": "interval",
+                        "label": "Interval"
+                    },
+                    {
+                        "field": "index",
+                        "label": "Index"
+                    },
+                    {
+                        "field": "disabled",
+                        "label": "Status"
+                    }
+                ],
+                "moreInfo": [
+                    {
+                        "field": "name",
+                        "label": "Name"
+                    },
+                    {
+                        "field": "interval",
+                        "label": "Interval"
+                    },
+                    {
+                        "field": "index",
+                        "label": "Index"
+                    },
+                    {
+                        "field": "disabled",
+                        "label": "Status"
+                    },
+                    {
+                        "field": "u4v_ip_address",
+                        "label": "Unisphere IP Address"
+                    },
+                    {
+                        "field": "u4v_port",
+                        "label": "Unisphere Port"
+                    },
+                    {
+                        "field": "u4v_username",
+                        "label": "Unisphere Username"
+                    },
+                    {
+                        "field": "u4v_password",
+                        "label": "Unisphere Password"
+                    },
+                    {
+                        "field": "u4v_vmax_id",
+                        "label": "Array ID"
+                    },
+                    {
+                        "field": "enable_ssl",
+                        "label": "Enable SSL"
+                    },
+                    {
+                        "field": "ssl_cert_location",
+                        "label": "SSL Cert Location"
+                    },
+                    {
+                        "field": "rest_request_timeout",
+                        "label": "REST Request Timeout"
+                    },
+                    {
+                        "field": "select_array",
+                        "label": "Array"
+                    },
+                    {
+                        "field": "select_array_metrics",
+                        "label": "Array Custom Metrics"
+                    },
+                    {
+                        "field": "select_srp",
+                        "label": "SRP"
+                    },
+                    {
+                        "field": "select_srp_metrics",
+                        "label": "SRP Custom Metrics"
+                    },
+                    {
+                        "field": "select_sg",
+                        "label": "Storage Group"
+                    },
+                    {
+                        "field": "select_sg_metrics",
+                        "label": "Storage Group Custom Metrics"
+                    },
+                    {
+                        "field": "select_director",
+                        "label": "Director"
+                    },
+                    {
+                        "field": "select_fe_dir_metrics",
+                        "label": "FE Director Custom Metrics"
+                    },
+                    {
+                        "field": "select_be_dir_metrics",
+                        "label": "BE Director Custom Metrics"
+                    },
+                    {
+                        "field": "select_rdf_dir_metrics",
+                        "label": "RDF Director Custom Metrics"
+                    },
+                    {
+                        "field": "select_im_dir_metrics",
+                        "label": "IM Director Custom Metrics"
+                    },
+                    {
+                        "field": "select_eds_dir_metrics",
+                        "label": "EDS Director Custom Metrics"
+                    },
+                    {
+                        "field": "select_port",
+                        "label": "Port"
+                    },
+                    {
+                        "field": "select_fe_port_metrics",
+                        "label": "FE Port Custom Metrics"
+                    },
+                    {
+                        "field": "select_be_port_metrics",
+                        "label": "BE Port Custom Metrics"
+                    },
+                    {
+                        "field": "select_rdf_port_metrics",
+                        "label": "RDF Port Custom Metrics"
+                    },
+                    {
+                        "field": "select_pg",
+                        "label": "Port Group"
+                    },
+                    {
+                        "field": "select_pg_metrics",
+                        "label": "Port Group Custom Metrics"
+                    },
+                    {
+                        "field": "select_iscsi",
+                        "label": "iSCSI"
+                    },
+                    {
+                        "field": "select_ip_interface_metrics",
+                        "label": "IP Interface Custom Metrics"
+                    },
+                    {
+                        "field": "select_iscsi_target_metrics",
+                        "label": "iSCSI Target Custom Metrics"
+                    },
+                    {
+                        "field": "select_host",
+                        "label": "Host"
+                    },
+                    {
+                        "field": "select_host_metrics",
+                        "label": "Host Custom Metrics"
+                    },
+                    {
+                        "field": "select_mv",
+                        "label": "Masking View"
+                    },
+                    {
+                        "field": "select_mv_metrics",
+                        "label": "Masking View Custom Metrics"
+                    },
+                    {
+                        "field": "select_initiator",
+                        "label": "Initiator"
+                    },
+                    {
+                        "field": "select_initiator_metrics",
+                        "label": "Initiator Custom Metrics"
+                    },
+                    {
+                        "field": "select_rdf",
+                        "label": "RDF Group"
+                    },
+                    {
+                        "field": "select_rdfs_metrics",
+                        "label": "RDF/S Custom Metrics"
+                    },
+                    {
+                        "field": "select_rdfa_metrics",
+                        "label": "RDF/A Custom Metrics"
+                    },
+                    {
+                        "field": "select_metro_dr",
+                        "label": "Metro DR"
+                    },
+                    {
+                        "field": "select_snap_policy",
+                        "label": "Snapshot Policy"
+                    },
+                    {
+                        "field": "select_audit_logs",
+                        "label": "Audit Logs"
+                    },
+                    {
+                        "field": "select_alerts",
+                        "label": "Alerts"
+                    }
+                ],
+                "actions": [
+                    "edit",
+                    "enable",
+                    "delete",
+                    "clone"
+                ]
+            },
+            "services": [
+                {
+                    "name": "inputs",
+                    "title": "VMAX/PowerMax",
+                    "entity": [
+                        {
+                            "field": "name",
+                            "label": "Name",
+                            "type": "text",
+                            "help": "Enter a unique name for the data input",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[a-zA-Z]\\w*$",
+                                    "errorMsg": "Input Name must start with a letter and followed by alphabetic letters, digits or underscores."
+                                },
+                                {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 100,
+                                    "errorMsg": "Length of input name should be between 1 and 100"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "interval",
+                            "label": "Interval",
+                            "type": "text",
+                            "required": true,
+                            "help": "Time interval of input in seconds.",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^\\-[1-9]\\d*$|^\\d*$",
+                                    "errorMsg": "Interval must be an integer."
+                                }
+                            ]
+                        },
+                        {
+                            "field": "index",
+                            "label": "Index",
+                            "type": "singleSelect",
+                            "defaultValue": "default",
+                            "options": {
+                                "endpointUrl": "data/indexes",
+                                "createSearchChoice": true,
+                                "denyList": "^_.*$"
+                            },
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 80,
+                                    "errorMsg": "Length of index name should be between 1 and 80."
+                                }
+                            ]
+                        },
+                        {
+                            "field": "u4v_ip_address",
+                            "label": "Unisphere IP Address",
+                            "help": "",
+                            "required": true,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "u4v_port",
+                            "label": "Unisphere Port",
+                            "help": "Unisphere default port is 8443",
+                            "required": true,
+                            "type": "text",
+                            "defaultValue": "8443",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ],
+                            "options": {
+                                "placeholder": "8443"
+                            }
+                        },
+                        {
+                            "field": "u4v_username",
+                            "label": "Unisphere Username",
+                            "help": "",
+                            "required": true,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "u4v_password",
+                            "label": "Unisphere Password",
+                            "help": "",
+                            "required": true,
+                            "type": "text",
+                            "encrypted": true,
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of password is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "u4v_vmax_id",
+                            "label": "Array ID",
+                            "help": "This is the 12-digit array ID",
+                            "required": true,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "enable_ssl",
+                            "label": "Enable SSL",
+                            "help": "Enable SSL communication between Splunk and Unisphere",
+                            "required": false,
+                            "type": "checkbox",
+                            "defaultValue": true
+                        },
+                        {
+                            "field": "ssl_cert_location",
+                            "label": "SSL Cert Location",
+                            "help": "(Optional) Leave this blank if the Unisphere SSL certificate is loaded into the system, otherwise you can specify the direct path to the .pem certificate",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ],
+                            "options": {
+                                "placeholder": "/path/to/cert"
+                            }
+                        },
+                        {
+                            "field": "rest_request_timeout",
+                            "label": "REST Request Timeout",
+                            "help": "(Optional) Default REST request timeout value in seconds, default is 60, for more information please consult the TA user guide",
+                            "required": false,
+                            "type": "text",
+                            "defaultValue": "60",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_array",
+                            "label": "Array",
+                            "help": "Collect Array level information",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "array_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "array_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "array_kpi",
+                                        "label": "KPIs Only"
+                                    },
+                                    {
+                                        "value": "array_custom",
+                                        "label": "Custom Metrics"
+                                    },
+                                    {
+                                        "value": "array_all",
+                                        "label": "All Metrics"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_array_metrics",
+                            "label": "Array Custom Metrics",
+                            "help": "(Optional) For custom Array reporting metrics please define comma separated list of metrics here.",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_srp",
+                            "label": "SRP",
+                            "help": "Collect Storage Resource Pool level information",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "srp_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "srp_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "srp_kpi",
+                                        "label": "KPIs Only"
+                                    },
+                                    {
+                                        "value": "srp_custom",
+                                        "label": "Custom Metrics"
+                                    },
+                                    {
+                                        "value": "srp_all",
+                                        "label": "All Metrics"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_srp_metrics",
+                            "label": "SRP Custom Metrics",
+                            "help": "(Optional) For custom SRP reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_sg",
+                            "label": "Storage Group",
+                            "help": "Collect Storage Group level information",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "sg_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "sg_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "sg_kpi",
+                                        "label": "KPIs Only"
+                                    },
+                                    {
+                                        "value": "sg_custom",
+                                        "label": "Custom Metrics"
+                                    },
+                                    {
+                                        "value": "sg_all",
+                                        "label": "All Metrics"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_sg_metrics",
+                            "label": "Storage Group Custom Metrics",
+                            "help": "(Optional) For custom SG reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_director",
+                            "label": "Director",
+                            "help": "Collect Director level information",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "dir_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "dir_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "dir_kpi",
+                                        "label": "KPIs Only"
+                                    },
+                                    {
+                                        "value": "dir_custom",
+                                        "label": "Custom Metrics"
+                                    },
+                                    {
+                                        "value": "dir_all",
+                                        "label": "All Metrics"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_fe_dir_metrics",
+                            "label": "FE Director Custom Metrics",
+                            "help": "(Optional) For custom FE Director reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_be_dir_metrics",
+                            "label": "BE Director Custom Metrics",
+                            "help": "(Optional) For custom BE Director reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_rdf_dir_metrics",
+                            "label": "RDF Director Custom Metrics",
+                            "help": "(Optional) For custom RDF Director reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_im_dir_metrics",
+                            "label": "IM Director Custom Metrics",
+                            "help": "(Optional) For custom IM Director reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_eds_dir_metrics",
+                            "label": "EDS Director Custom Metrics",
+                            "help": "(Optional) For custom EDS Director reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_port",
+                            "label": "Port",
+                            "help": "Collect Port level information",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "port_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "port_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "port_kpi",
+                                        "label": "KPIs Only"
+                                    },
+                                    {
+                                        "value": "port_custom",
+                                        "label": "Custom Metrics"
+                                    },
+                                    {
+                                        "value": "port_all",
+                                        "label": "All Metrics"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_fe_port_metrics",
+                            "label": "FE Port Custom Metrics",
+                            "help": "(Optional) For custom FE Port reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_be_port_metrics",
+                            "label": "BE Port Custom Metrics",
+                            "help": "(Optional) For custom BE Port reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_rdf_port_metrics",
+                            "label": "RDF Port Custom Metrics",
+                            "help": "(Optional) For custom RDF Port reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_pg",
+                            "label": "Port Group",
+                            "help": " Collect Port Group level information",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "pg_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "pg_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "pg_kpi",
+                                        "label": "KPIs Only"
+                                    },
+                                    {
+                                        "value": "pg_custom",
+                                        "label": "Custom Metrics"
+                                    },
+                                    {
+                                        "value": "pg_all",
+                                        "label": "All Metrics"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_pg_metrics",
+                            "label": "Port Group Custom Metrics",
+                            "help": "(Optional) For custom Port Group reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_iscsi",
+                            "label": "iSCSI",
+                            "help": "Collect iSCSI Target & IP Interface level information",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "iscsi_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "iscsi_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "iscsi_kpi",
+                                        "label": "KPIs Only"
+                                    },
+                                    {
+                                        "value": "iscsi_custom",
+                                        "label": "Custom Metrics"
+                                    },
+                                    {
+                                        "value": "iscsi_all",
+                                        "label": "All Metrics"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_ip_interface_metrics",
+                            "label": "IP Interface Custom Metrics",
+                            "help": "(Optional) For custom IP Interface reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_iscsi_target_metrics",
+                            "label": "iSCSI Target Custom Metrics",
+                            "help": "(Optional) For custom iSCSI Target reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_host",
+                            "label": "Host",
+                            "help": "Collect Host level information",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "host_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "host_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "host_kpi",
+                                        "label": "KPIs Only"
+                                    },
+                                    {
+                                        "value": "host_custom",
+                                        "label": "Custom Metrics"
+                                    },
+                                    {
+                                        "value": "host_all",
+                                        "label": "All Metrics"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_host_metrics",
+                            "label": "Host Custom Metrics",
+                            "help": "(Optional) For custom Host reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_mv",
+                            "label": "Masking View",
+                            "help": "Collect Masking View level information",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "mv_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "mv_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "mv_kpi",
+                                        "label": "KPIs Only"
+                                    },
+                                    {
+                                        "value": "mv_custom",
+                                        "label": "Custom Metrics"
+                                    },
+                                    {
+                                        "value": "mv_all",
+                                        "label": "All Metrics"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_mv_metrics",
+                            "label": "Masking View Custom Metrics",
+                            "help": "(Optional) For custom Masking View reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_initiator",
+                            "label": "Initiator",
+                            "help": "Collect Initiator level information",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "init_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "init_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "init_kpi",
+                                        "label": "KPIs Only"
+                                    },
+                                    {
+                                        "value": "init_custom",
+                                        "label": "Custom Metrics"
+                                    },
+                                    {
+                                        "value": "init_all",
+                                        "label": "All Metrics"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_initiator_metrics",
+                            "label": "Initiator Custom Metrics",
+                            "help": "(Optional) For custom Initiator reporting metrics please define comma separated list of metrics here.",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_rdf",
+                            "label": "RDF Group",
+                            "help": "Collect RDF Group level information",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "rdf_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "rdf_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "rdf_kpi",
+                                        "label": "KPIs Only"
+                                    },
+                                    {
+                                        "value": "rdf_custom",
+                                        "label": "Custom Metrics"
+                                    },
+                                    {
+                                        "value": "rdf_all",
+                                        "label": "All Metrics"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_rdfs_metrics",
+                            "label": "RDF/S Custom Metrics",
+                            "help": "(Optional) For custom RDF/S reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_rdfa_metrics",
+                            "label": "RDF/A Custom Metrics",
+                            "help": "(Optional) For custom RDF/A reporting metrics please define comma separated list of metrics here",
+                            "required": false,
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of text input is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "select_metro_dr",
+                            "label": "Metro DR",
+                            "help": "Collect Metro Disaster Recovery level information",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "metro_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "metro_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "metro_on",
+                                        "label": "On"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_snap_policy",
+                            "label": "Snapshot Policy",
+                            "help": "Collect Snapshot Policy level information",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "sp_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "sp_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "sp_on",
+                                        "label": "On"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_audit_logs",
+                            "label": "Audit Logs",
+                            "help": "Collect system audit logs - WARNING: Only enable this once per instance of Unisphere configured with Splunk",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "audit_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "audit_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "audit_on",
+                                        "label": "On"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "select_alerts",
+                            "label": "Alerts",
+                            "help": "Collect Array alerts - WARNING: If Alerts are not managed in Unisphere this can result a significant level of data ingestion into Splunk",
+                            "required": false,
+                            "type": "singleSelect",
+                            "defaultValue": "alerts_off",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "alerts_off",
+                                        "label": "Off"
+                                    },
+                                    {
+                                        "value": "alerts_on",
+                                        "label": "On"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
