@@ -81,8 +81,7 @@ class CITestPowerMaxSplunk(base.TestBaseTestCase, testtools.TestCase):
 
         powermax_input_module.collect_events(
             helper=self.helper, ew=self.writer)
-        self.run_standard_event_collection_asserts(
-            map_key=pc.SRP, reporting_level='SRP', metric_type=ALL)
+        self.run_srp_event_collection_asserts(map_key=pc.SRP, metric_type=ALL)
 
     def test_collect_events_srp_all(self):
         """Test collect_events for SRP with 'ALL' metrics enabled."""
@@ -92,8 +91,7 @@ class CITestPowerMaxSplunk(base.TestBaseTestCase, testtools.TestCase):
 
         powermax_input_module.collect_events(
             helper=self.helper, ew=self.writer)
-        self.run_standard_event_collection_asserts(
-            map_key=pc.SRP, reporting_level='SRP', metric_type=ALL)
+        self.run_srp_event_collection_asserts(map_key=pc.SRP, metric_type=ALL)
 
     def test_collect_events_srp_kpi(self):
         """Test collect_events for SRP with 'KPI' metrics enabled."""
@@ -103,8 +101,7 @@ class CITestPowerMaxSplunk(base.TestBaseTestCase, testtools.TestCase):
 
         powermax_input_module.collect_events(
             helper=self.helper, ew=self.writer)
-        self.run_standard_event_collection_asserts(
-            map_key=pc.SRP, reporting_level='SRP', metric_type=KPI)
+        self.run_srp_event_collection_asserts(map_key=pc.SRP, metric_type=KPI)
 
     def test_collect_events_srp_custom(self):
         """Test collect_events for SRP with 'custom' metrics enabled."""
@@ -114,8 +111,8 @@ class CITestPowerMaxSplunk(base.TestBaseTestCase, testtools.TestCase):
 
         powermax_input_module.collect_events(
             helper=self.helper, ew=self.writer)
-        self.run_standard_event_collection_asserts(
-            map_key=pc.SRP, reporting_level='SRP', metric_type=CUSTOM)
+        self.run_srp_event_collection_asserts(map_key=pc.SRP,
+                                              metric_type=CUSTOM)
 
     # Storage Group level tests
     def test_collect_events_storage_group_legacy_all(self):

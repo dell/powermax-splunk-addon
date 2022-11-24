@@ -349,6 +349,11 @@ class FakeRequestsSession(object):
         # Get performance data
         if category == 'metrics':
             return_object = deepcopy(scd.dummy_performance_response)
+        elif category == 'help':
+            if uri[-1] == 'categories':
+                return_object = deepcopy(scd.get_diagnostic_categories)
+            if uri[-2] == 'metrics':
+                return_object = deepcopy(scd.get_metrics_list)
 
         # Get category level specific information
         elif performance_section == 'Array':

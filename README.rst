@@ -1,4 +1,4 @@
-Welcome to PowerMax for Splunk 3.1!
+Welcome to PowerMax for Splunk 4.0!
 ===================================
 
 | |Maintenance| |OpenSource| |AskUs| |Test| |Build| |Docs|
@@ -31,15 +31,15 @@ The TA and App can be downloaded from the links below:
 Version Info
 ------------
 +---------------------------------+----------------------------------------+
-| **PowerMax for Splunk**         | 3.1                                    |
+| **PowerMax for Splunk**         | 4.0                                    |
 +---------------------------------+----------------------------------------+
-| **Technology Add-On**           | 3.1.0.0                                |
+| **Technology Add-On**           | 4.0.0                                  |
 +---------------------------------+----------------------------------------+
-| **App**                         | 3.1.0.0                                |
+| **App**                         | 4.0.0                                  |
 +---------------------------------+----------------------------------------+
-| **Minimum Unisphere Version**   | 9.2.0.0                                |
+| **Minimum Unisphere Version**   | 10.0.0.0                               |
 +---------------------------------+----------------------------------------+
-| **Array Model**                 | VMAX-3, VMAX AFA, PowerMax             |
+| **Array Model**                 | VMAX-3, VMAX AFA, PowerMax, V4         |
 +---------------------------------+----------------------------------------+
 | **Array uCode**                 | HyperMax OS, PowerMax OS               |
 +---------------------------------+----------------------------------------+
@@ -51,12 +51,8 @@ Version Info
 +---------------------------------+----------------------------------------+
 
 Note
-    To get full support of all features in PowerMax for Splunk 3.x you will
-    need to have your array u-code at level 5978.7xx.xxx (Hickory SR) or newer
-    and use both Solutions Enabler 9.2.1 and Unisphere for PowerMax 9.2.1.
-    PowerMax for Splunk uses new efficiency statistics which are only available
-    in the Hickory SR release. If your array is lower than 5978.7xx.xxx then
-    these statistics will not be reported on in PowerMax for Splunk.
+    For PowerMax 2500 and 8500 models, minimum operating environment of PowerMax OS 10 and Management Software
+    Unisphere for PowerMax version 10, for older PowerMax models Unipshere 10 is required.
 
 Note
     PowerMax for Splunk has been tested and verified only against Python 3.x.
@@ -80,7 +76,7 @@ You will need to restart to complete the installation process.
 For the remainder of this section the process of installing from a local file
 will be detailed.
 
-1. Download the TA and App from Splunk Base.
+1. Download the TA and App(Sample Dashboards) from Splunk Base.
 
 - `Dell EMC PowerMax Add-on for Splunk Enterprise`_
 - `Dell EMC PowerMax App for Splunk Enterprise`_
@@ -244,55 +240,6 @@ issues. The default location for this log file is:
 
 - ``{splunk_install_dir}/var/log/splunk/splunkd.log``
 
-GitHub Issues
--------------
-From the PowerMax for Splunk 3.x release code will be hosted on the public
-`Dell GitHub`_ repo. The code and documentation are released with no warranties
-or SLAs and are intended to be supported through a community driven process.
-
-We aim to track and document everything related to this repo via the issues
-page. The following links will direct you to the issues sections of the
-respective PowerMax for Splunk offerings:
-
-- `PowerMax Add-on for Splunk Issues`_
-- `PowerMax App for Splunk Issues`_
-
-When opening an issue please include the following information to help us
-debug:
-
-- Detailed information about the problem you are having
-- PowerMax for Splunk version
-- Unisphere version
-- Splunk Enterprise version
-- Splunk Operating system version
-- PowerMax for Splunk TA logs and splunkd logs if required (if these contain
-  sensitive data they can be sent directly to our support contact alias listed
-  in below in Support Contact.
-
-Note
-    We will support N-2 releases from the current main release which includes
-    bug and security fixes. If an issue appears in a code base older than N-2
-    we will try to assist as best possible but ultimately upgrading to a newer
-    version of PowerMax for Splunk will be the ideal outcome. As new releases
-    of PowerMax for Splunk are made available, anything older than N-2 will be
-    marked as End of Life (EOL).
-
-GitHub Discussion
------------------
-A new feature in GitHub, 'Discussions', allows for community interaction
-between developers and users. If you have a general query and would rather
-community input for it than opening an issue or sending an e-mail to the
-developers, Discussions is the place to do it.
-
-- `PowerMax Add-on for Splunk Discussion`_
-- `PowerMax App for Splunk Discussion`_
-
-Before opening a new discussion, check if there are no existing discussions
-that match what you would like to talk about.  If you cannot find an
-existing discussion, open one and describe your topic as clearly as possible,
-including TA/App versions where applicable.
-
-
 Support Contact
 ---------------
 In addition to contact via GitHub, it is possible to contact directly via
@@ -327,9 +274,5 @@ information as possible about the problem including:
 .. _PyU4V: https://github.com/dell/PyU4V
 .. _`Dell EMC PowerMax Add-on for Splunk Enterprise`: https://splunkbase.splunk.com/app/3416/
 .. _`Dell EMC PowerMax App for Splunk Enterprise`: https://splunkbase.splunk.com/app/3467/
-.. _issues: https://github.com/MichaelMcAleer/PyU4V/issues
 .. _`Dell GitHub`: https://github.com/dell
-.. _`PowerMax Add-on for Splunk Issues`: https://github.com/dell/powermax-splunk-addon/issues
-.. _`PowerMax App for Splunk Issues`: https://github.com/dell/powermax-splunk-app/issues
-.. _`PowerMax Add-on for Splunk Discussion`: https://github.com/dell/powermax-splunk-addon/discussion
-.. _`PowerMax App for Splunk Discussion`: https://github.com/dell/powermax-splunk-app/discussion
+

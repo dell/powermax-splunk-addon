@@ -20,8 +20,8 @@ import time
 class CommonData(object):
     """Common data."""
     # Version info
-    U4P_VERSION = '92'
-    SERVER_VERSION = {'version': 'V9.2.0.0'}
+    U4P_VERSION = '100'
+    SERVER_VERSION = {'version': 'V10.0.0.0'}
 
     # Splunk Input Configuration
     U4P_IP_ADDRESS = '8.8.8.8'
@@ -153,6 +153,26 @@ class CommonData(object):
     # ============== #
     # Call responses #
     # ============== #
+
+    # >>> Performance Helper Methods
+    # List categories
+    get_diagnostic_categories = {
+        'categoryName': [
+            'Array', 'BEDirector', 'BEPort', 'BeEmulation', 'Board',
+            'CachePartition', 'DeviceGroup', 'DiskGroup', 'EDSDirector',
+            'EDSEmulation', 'EMDirector', 'ExternalDirector', 'ExternalDisk',
+            'ExternalDiskGroup', 'FEDirector', 'FEPort', 'FiconEmulation',
+            'FeEmulation', 'FiconEmulationThread', 'FiconPortThread', 'Host',
+            'IMDirector', 'IMEmulation', 'IPInterface', 'ISCSITarget',
+            'Initiator', 'MaskingView', 'PortGroup', 'RDFA', 'RDFDirector',
+            'RDFEmulation', 'RDFPort', 'RDFS', 'SDNASFileSystem',
+            'SDNASInterface', 'SDNASNode', 'SDNASServer', 'SRP',
+            'StorageContainer', 'StorageGroup', 'StorageResource', 'ThinPool',
+            'cloudprovider', 'zHyperLinkPort']}
+    # List metrics
+    get_metrics_list = {
+        'metricName': [
+            'BEIOs', 'BEReadReqs', 'FEReadReqs', 'HostMBs', 'HostIOs']}
 
     # >>> SLO Provisioning level calls
     # Array
@@ -294,9 +314,9 @@ class CommonData(object):
     get_audit_log_list = {'maxPageSize': 1000, 'count': 2, 'resultList': {
         'result': [{'record_id': 10000}, {'record_id': 10001}]}}
 
-    get_audit_log = {
+    get_audit_log = {'objectList': [{
         'message': 'Processing started  ', 'entry_date': int(time.time()),
-        'record_id': 298011, 'username': 'X:SPLUNK-1\\test_user'}
+        'record_id': 298011, 'username': 'X:SPLUNK-1\\test_user'}]}
 
     # >>> WLP level calls
     get_array_wlp_capabilities = {

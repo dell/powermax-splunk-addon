@@ -62,8 +62,23 @@ def collect_events(helper, ew):
             try:
                 srp_details = pmax.get_srp_details(srp_id=srp)
                 pmax.write_event(data=srp_details)
+
+                # V4 SRPs are not as-is between sloprov and perf endpoints
+                key_func = pmax.conn.performance.get_storage_resource_pool_keys
+                for srp_perf in key_func():
+                    srp_id = srp_perf.get('srpId')
+                    if srp in srp_id:
+                        try:
+                            srp_perf = pmax.get_srp_performance_info(
+                                srp_id=srp_id)
+                            pmax.write_event(data=srp_perf)
+
+                        except PYU4V_EXCEPTIONS:
+                            pmax.log_collection_error(asset_type='SRP_PERF',
+                                                      asset_id=srp_id)
             except PYU4V_EXCEPTIONS:
                 pmax.log_collection_error(asset_type='SRP', asset_id=srp)
+
         pmax.log_info('SRP collection complete.')
 
     # Collect SG level metrics
@@ -80,10 +95,16 @@ def collect_events(helper, ew):
 
     # Collect Director level metrics
     if pmax.enabled_categories.get('director'):
-        for director in pmax.conn.provisioning.get_director_list():
+        for director in pmax.conn.system.get_director_list():
             try:
-                dir_details = pmax.get_director_details(director_id=director)
-                pmax.write_event(data=dir_details)
+                if any(x in director for x in ['OR']):
+                    dir_details = pmax.get_director_details(director_id=director)
+                    pmax.write_event(data=dir_details)
+                    rdf_dir_details = pmax.get_director_or_rdf_details(director_id=director)
+                    pmax.write_event(data=rdf_dir_details)
+                else:
+                    dir_details = pmax.get_director_details(director_id=director)
+                    pmax.write_event(data=dir_details)
             except PYU4V_EXCEPTIONS:
                 pmax.log_collection_error(
                     asset_type='Director', asset_id=director)

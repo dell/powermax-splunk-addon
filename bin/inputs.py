@@ -136,6 +136,12 @@ class ModInputinputs(modinput_wrapper.base_modinput.BaseModInput):
                 'define comma separated list of metrics here.'),
             required_on_create=False, required_on_edit=False))
         scheme.add_argument(smi.Argument(
+            'select_em_dir_metrics', title='EM Director Custom Metrics',
+            description=(
+                '(Optional) For custom EM Director reporting metrics please '
+                'define comma separated list of metrics here'),
+            required_on_create=False, required_on_edit=False))
+        scheme.add_argument(smi.Argument(
             'select_port', title='Port',
             description='Collect Port level information.',
             required_on_create=False, required_on_edit=False))
@@ -170,7 +176,7 @@ class ModInputinputs(modinput_wrapper.base_modinput.BaseModInput):
         scheme.add_argument(smi.Argument(
             'select_iscsi', title='iSCSI',
             description=(
-                'Collect iSCSI Target & IP Interface level information.'),
+                'Collect Endpoint(iSCSI Target) & IP Interface level information.'),
             required_on_create=False, required_on_edit=False))
         scheme.add_argument(smi.Argument(
             'select_ip_interface_metrics', title='IP Interface Custom Metrics',
@@ -179,9 +185,9 @@ class ModInputinputs(modinput_wrapper.base_modinput.BaseModInput):
                 'define comma separated list of metrics here.'),
             required_on_create=False, required_on_edit=False))
         scheme.add_argument(smi.Argument(
-            'select_iscsi_target_metrics', title='iSCSI Target Custom Metrics',
+            'select_iscsi_target_metrics', title='Endpoint Custom Metrics',
             description=(
-                '(Optional) For custom iSCSI Target reporting metrics please '
+                '(Optional) For custom Endpoint reporting metrics please '
                 'define comma separated list of metrics here.'),
             required_on_create=False, required_on_edit=False))
         scheme.add_argument(smi.Argument(

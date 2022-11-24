@@ -39,8 +39,9 @@ APP_OCT = 'application/octet-stream'
 APP_MPART = 'multipart/form-data'
 
 # Unisphere REST URI constants
-PYU4V_VERSION = '9.2.0.3'
-UNISPHERE_VERSION = '92'
+PYU4V_VERSION = '10.0.0.17'
+UNISPHERE_VERSION = '100'
+UCODE_6079 = '6079'
 VERSION = 'version'
 ITERATOR = 'Iterator'
 PAGE = 'page'
@@ -55,6 +56,7 @@ WLP = 'wlp'
 MIGRATION = 'migration'
 DSA = 'dsa'
 SYSTEM = 'system'
+LOCAL_USER = 'local_user'
 VOLUME = 'volume'
 VVOL = 'vvol'
 COMMON = 'common'
@@ -83,6 +85,9 @@ RDF_DIRECTOR = 'rdf_director'
 REMOTE_PORT = 'remote_port'
 ALERT = 'alert'
 ALERT_SUMMARY = 'alert_summary'
+COMPLIANCE = 'compliance'
+FICON_SPLIT = 'split'
+CU_IMAGE = 'cuimage'
 
 # Status Codes
 STATUS_200 = 200
@@ -104,9 +109,12 @@ CREATE_VOL_STRING = 'Creating new Volumes'
 # Replication Modes
 ASYNCHRONOUS_CC = 'Asynchronous'
 ADAPTIVE_COPY = 'AdaptiveCopyDisk'
+DISABLECONSISTENCY = 'DisableConsistency'
+ENABLECONSISTENCY = 'EnableConsistency'
 ESTABLISH = 'Establish'
 FAILBACK = 'Failback'
 FAILOVER = 'Failover'
+RECOVER = 'Recover'
 RESTORE = 'Restore'
 RESUME = 'Resume'
 SETBIAS = 'SetBias'
@@ -122,10 +130,9 @@ RDFG_ACTIONS = {
     'REMOVE_PORTS': 'remove_ports', 'SET_LABEL': 'set_label'}
 METRO_DR_ACTIONS = {
     'ESTABLISH': ESTABLISH, 'SPLIT': SPLIT, 'SUSPEND': SUSPEND,
-    'RESTORE': RESTORE, 'FAILOVER': FAILOVER, 'FAILBACK': FAILBACK,
-    'SETMODE': SETMODE, 'UPDATER1': UPDATE_R1
+    'RECOVER': RECOVER, 'RESTORE': RESTORE, 'FAILOVER': FAILOVER,
+    'FAILBACK': FAILBACK, 'SETMODE': SETMODE, 'UPDATER1': UPDATE_R1
 }
-
 METRO_DR_ACTION_PARAMS = {
     'ESTABLISH': 'establish', 'SPLIT': 'split', 'SUSPEND': 'suspend',
     'RESTORE': 'restore', 'FAILOVER': 'failover',
@@ -198,6 +205,41 @@ TOTAL_SRDF_DSE_ALLOCATED_CAP_GB = 'total_srdf_dse_allocated_cap_gb'
 RDFA_DSE = 'rdfa_dse'
 DISK_GROUP_ID = 'diskGroupId'
 
+# V3 SRP constants
+SUBSCRIBED_ALLOCATED_TB = 'subscribed_allocated_tb'
+SUBSCRIBED_TOTAL_TB = 'subscribed_total_tb'
+SNAPSHOT_MODIFIED_TB = 'snapshot_modified_tb'
+SNAPSHOT_TOTAL_TB = 'snapshot_total_tb'
+USABLE_USED_TB = 'usable_used_tb'
+USABLE_TOTAL_TB = 'usable_total_tb'
+EFFECTIVE_USED_CAPACITY_PERCENT = 'effective_used_capacity_percent'
+
+# V4 SRP constants
+FBA_SRP_CAPACITY = 'fba_srp_capacity'
+SERVICE_LEVELS = 'service_levels'
+USED_TB = 'used_tb'
+TOTAL_TB = 'total_tb'
+FREE_TB = 'free_tb'
+EFFECTIVE_CAPACITY_TB = 'effective_capacity_tb'
+PROVISIONED_TB = 'provisioned_tb'
+PROVISIONED_PERCENT = 'provisioned_percent'
+EFFECTIVE_USED_PERCENT = 'effective_used_percent'
+PHYSICAL_CAPACITY = 'physical_capacity'
+EFFECTIVE_CAPACITY_RESOURCES = 'effective_capacity_resources'
+EFFECTIVE_CAPACITY_USAGE = 'effective_capacity_usage'
+PHYSICAL_USED_PERCENT = 'physical_used_percent'
+REDUCING_DATA_PERCENT = 'reducing_data_percent'
+SAVINGS_TB = 'savings_tb'
+EFFECTIVE_USED = 'effective_used'
+PHYSICAL_USED = 'physical_used'
+SNAPSHOT_USED_TB = 'snapshot_used_tb'
+USER_USED_TB = 'user_used_tb'
+ENABLED_AND_REDUCING_TB = 'enabled_and_reducing_tb'
+ENABLED_AND_UNREDUCIBLE_TB = 'enabled_and_unreducible_tb'
+ENABLED_AND_UNEVALUATED_TB = 'enabled_and_unevaluated_tb'
+DATA_REDUCTION_DISABLED_TB = 'data_reduction_disabled_tb'
+DISABLED_AND_UNREDUCED_TB = 'disabled_and_unreduced_tb'
+
 # Storage Group constants
 STORAGE_GROUP_ID_CAMEL = 'storageGroupId'
 STORAGE_GROUP_ID = 'storage_group_id'
@@ -258,19 +300,18 @@ FCID = 'fcid'
 
 # Regex search pattern constants
 DIRECTOR_SEARCH_PATTERN = '\\w{2}-\\w{2}'
-PORT_SEARCH_PATTERN = '\\w{1,2}'
+PORT_SEARCH_PATTERN = '\\d{1,3}'
 WWN_SEARCH_PATTERN_16 = '[0-9a-fA-F]{16}'
 WWN_SEARCH_PATTERN_32 = '[0-9a-fA-F]{32}'
 ISCSI_IQN_SEARCH_PATTERN = (
-    '^iqn.\\d{4}-\\d{2}.(?:com|org).\\w{1,}:(?:\\d{2}:)*'
-    '[0-9a-fA-F]{1,32}$')
+    '^iqn.\\d{1,4}-\\d{2}.(?:com|org).\\w{1,}:(?:\\d{2}:)*'
+    '[0-9a-fA-F]{1,32}$||.[0-9A-Fa-f]{16}')
 non_iscsi_initiator_pattern = '{d}:{p}:{w}'.format(
     d=DIRECTOR_SEARCH_PATTERN, p=PORT_SEARCH_PATTERN,
     w=WWN_SEARCH_PATTERN_16)
-iscsi_initiator_pattern = '{d}:{pa}'.format(
-    d=DIRECTOR_SEARCH_PATTERN,
-    pa='\\d{3}:iqn.\\d{4}-\\d{2}.(?:com|org).'
-       '\\w{1,}:\\d{2}:[0-9a-fA-F]{1,32}')
+iscsi_initiator_pattern = '{d}:{p}:{pa}'.format(
+    d=DIRECTOR_SEARCH_PATTERN, p=PORT_SEARCH_PATTERN,
+    pa=ISCSI_IQN_SEARCH_PATTERN)
 INITIATOR_SEARCH_PATTERN = '{ni}|{i}'.format(
     ni=non_iscsi_initiator_pattern, i=iscsi_initiator_pattern)
 
@@ -323,6 +364,7 @@ SNAPSHOT_POLICY_INTERVALS = ['10 Minutes', '12 Minutes', '15 Minutes',
 ASSOCIATE_TO_STORAGE_GROUPS = 'AssociateToStorageGroups'
 DISASSOCIATE_FROM_STORAGE_GROUPS = 'DisassociateFromStorageGroups'
 SNAPSHOT_POLICY = 'snapshot_policy'
+SNAPSHOT_POLICY_NAME_FOR_TEST = 'DailyDefault'
 MODIFY_POLICY = 'Modify'
 SUSPEND_POLICY = 'Suspend'
 RESUME_POLICY = 'Resume'
@@ -384,3 +426,9 @@ COUNT = 'count'
 
 # Date/Time
 STR_TIME_FORMAT = '%Y%m%d%H%M%S'
+
+# Port structure
+PORT_STRUCTURE = [{
+    'directorId': str,
+    'portId': str}
+]

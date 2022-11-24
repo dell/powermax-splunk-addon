@@ -1,4 +1,4 @@
-# Copyright (c) 2020 Dell Inc. or its subsidiaries.
+# Copyright (c) 2021 Dell Inc. or its subsidiaries.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ with open("README.rst", "r") as fh:
 
 setuptools.setup(
     name='PyU4V',
-    version='9.2.0.3',
+    version='10.0.0.17',
     url='https://github.com/dell/PyU4V/',
     author='Dell Inc. or its subsidiaries',
-    author_email='Michael.Mcaleer@dell.com',
+    author_email='helen.walsh@dell.com',
     description="A Python library for use with Dell EMC's Unisphere for "
                 "PowerMax REST API.",
     long_description=long_description,
@@ -44,6 +44,6 @@ setuptools.setup(
         'Programming Language :: Python :: 3.9',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Software Development :: Libraries :: Python Modules'],
-    python_requires='>=3.6, <=3.9',
+    python_requires='>=3.6, <4.0',
     tests_require=['mock', 'testtools'],
     test_suite='tests')

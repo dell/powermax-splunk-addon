@@ -31,9 +31,13 @@ for both code can be viewed and downloaded from the links below:
 - `Dell EMC PowerMax App for Splunk Enterprise source`_
 
 
-What's New in PowerMax for Splunk 3.1
+What's New in PowerMax for Splunk 4.0
 -------------------------------------
-- Upgrade TA to jQuery 3.5.
+- New categories have been added:
+
+    - EM Director
+    - iSCSI Target has been renamed Endpoint
+    - There is a new FE director type called OR
 
 Contact
 -------
@@ -48,11 +52,7 @@ following information:
 - Splunk Operating system version
 - PowerMax for Splunk TA logs and splunkd logs if required
 
-Starting in PowerMax for Splunk 3.x you can open GitHub issues or discuss
-topics related to PowerMax and Splunk. Feel free to open issues or topics if
-this is your preferred method of communication. You can find out more support
-information including where to get logs in :doc:`support`.
-
+You can find out more support information including where to get logs in :doc:`support`.
 
 Hours of Operation
 ------------------
@@ -73,28 +73,6 @@ Working Hours - Ireland (GMT+00:00):
 +-----------+---------------+
 | Sunday    | Closed        |
 +-----------+---------------+
-
-Holidays Observed 2021:
-
-+----------------------+---------------+
-| New Year's Day       | 1st January   |
-+----------------------+---------------+
-| Saint Patrick's Day  | 17th March    |
-+----------------------+---------------+
-| Easter Monday        | 5th April     |
-+----------------------+---------------+
-| May Bank Holiday     | 3rd May       |
-+----------------------+---------------+
-| June Bank Holiday    | 7th June      |
-+----------------------+---------------+
-| August Bank Holiday  | 2nd August    |
-+----------------------+---------------+
-| October Bank Holiday | 25th October  |
-+----------------------+---------------+
-| Christmas Day        | 25th December |
-+----------------------+---------------+
-| Saint Stephen's Day  | 26th December |
-+----------------------+---------------+
 
 .. URL LINKS
 

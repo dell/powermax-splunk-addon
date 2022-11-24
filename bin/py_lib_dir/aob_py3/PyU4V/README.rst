@@ -1,5 +1,5 @@
-Welcome to PyU4V 9.2
-====================
+Welcome to PyU4V 10.0
+=====================
 
 | |Maintenance| |OpenSource| |AskUs| |License| |Test| |Build| |Docs|
 | |Language| |PyVersions| |Unisphere| |Platform| |DTotal| |DMonth| |DWeek|
@@ -20,15 +20,15 @@ Note
    where ``{ip-address}`` is the IP address of your Unisphere server and
    ``{port}`` is the port it is listening on.
 
-PyU4V Version 9.2
------------------
+PyU4V Version 10.0
+------------------
 
 +-------------------------------+----------------------------+
 | **Author**                    | Dell EMC                   |
 +-------------------------------+----------------------------+
-| **PyU4V Version**             | 9.2.0.3                    |
+| **PyU4V Version**             | 10.0.0.17                   |
 +-------------------------------+----------------------------+
-| **Minimum Unisphere Version** | 9.2.0.1                    |
+| **Minimum Unisphere Version** | 10.0.0.0                   |
 +-------------------------------+----------------------------+
 | **Array Model**               | VMAX-3, VMAX AFA, PowerMax |
 +-------------------------------+----------------------------+
@@ -80,7 +80,7 @@ specifying ``PyU4V`` as the install package for ``pip``::
 
     $ pip install PyU4V
     # Install a specific version
-    $ pip install PyU4V==9.2.0.3
+    $ pip install PyU4V==10.0.0.0
 
 Copy the sample ``PyU4V.conf`` provided with PyU4V to either your working
 directory or within a directory named ``.PyU4V`` in your current users home
@@ -169,7 +169,7 @@ outlined in the previous section).
 
     conn = PyU4V.U4VConn()
     conn.common.get_unisphere_version()
-    >> {'version': 'V9.2.0.1'}
+    >> {'version': 'V10.0.0.0'}
 
 If you wish to query another array without changing the configuration file,
 call the connection ``set_array_id()`` function:
@@ -246,7 +246,7 @@ the License.
    :target: https://github.com/dell/PyU4V/blob/master/README.rst
 .. |Platform| image:: https://img.shields.io/badge/Platform-Linux%20%7C%20Windows-blue
    :target: https://github.com/dell/PyU4V/blob/master/README.rst
-.. |Unisphere| image:: https://img.shields.io/badge/Unisphere-9.2.0.1-blue
+.. |Unisphere| image:: https://img.shields.io/badge/Unisphere-10.0-blue
    :target: https://www.dell.com/support/home/us/en/19/product-support/product/unisphere-powermax/overview
 .. |DTotal| image:: https://pepy.tech/badge/pyu4v
    :target: https://pepy.tech/project/pyu4v

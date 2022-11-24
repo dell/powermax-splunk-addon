@@ -61,12 +61,15 @@ class MetroDRFunctions(object):
             resource_level_id=array_id, resource_type=METRO_DR)
         return response.get('names', list()) if response else list()
 
-    def get_metrodr_environment_details(self, environment_name, array_id=None):
+    def get_metrodr_environment_details(self, environment_name,
+                                        array_id=None, config=True):
         """Get details for metro DR environment.
 
         :param environment_name: Unique name to identify Metro DR environment
                                  -- str
         :param array_id: 12 Digit Serial Number of Array -- int
+        :param config: return full environment config details or
+                       summary -- bool
         :returns: details of the metro dr environments -- dict
         """
         if not array_id:
@@ -74,7 +77,7 @@ class MetroDRFunctions(object):
         response = self.get_resource(
             category=REPLICATION, resource_level=SYMMETRIX,
             resource_level_id=array_id, resource_type=METRO_DR,
-            resource_type_id=environment_name)
+            resource_type_id=environment_name, params={'config': config})
 
         return response
 
@@ -197,7 +200,7 @@ class MetroDRFunctions(object):
         return response
 
     def delete_metrodr_environment(
-            self, environment_name, remove_r1_dr_rdfg=False,
+            self, environment_name, remove_r1_dr_rdfg=False, force=False,
             metro_r1_array_id=None):
         """Deletes Metro DR Environment.
 
@@ -212,6 +215,7 @@ class MetroDRFunctions(object):
                                  characters-- str
         :param remove_r1_dr_rdfg: override default behavior and delete R11-R2
                                   RDFG from metro R1 side -- bool
+        :param force: required True if deleting R1 DR group -- bool
         :param metro_r1_array_id: 12 Digit Serial of Metro R1 source
                                   array -- str
         """
@@ -224,7 +228,7 @@ class MetroDRFunctions(object):
             category=REPLICATION, resource_level=SYMMETRIX,
             resource_level_id=array_id, resource_type=METRO_DR,
             resource_type_id=environment_name, params={
-                'remove_r1_dr_rdfg': remove_r1_dr_rdfg})
+                'remove_r1_dr_rdfg': remove_r1_dr_rdfg, 'force': force})
 
     def modify_metrodr_environment(
             self, environment_name, action, metro=False,
@@ -262,7 +266,7 @@ class MetroDRFunctions(object):
         else:
             msg = (
                 'SRDF Action must be one of [Establish, Split, Suspend, '
-                'Restore, Resume, Failover, Failback, Update_R1, '
+                'Recover, Restore, Resume, Failover, Failback, Update_R1, '
                 'SetMode]')
             LOG.exception(msg)
             raise exception.VolumeBackendAPIException(data=msg)

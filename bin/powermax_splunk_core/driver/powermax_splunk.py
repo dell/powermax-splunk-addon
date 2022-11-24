@@ -135,8 +135,23 @@ class PMaxSplunk:
         perf_categories = pc.PERFORMANCE_CATEGORIES
         perf_map = pc.PERFORMANCE_KEY_MAP
         for pc_key in perf_categories:
-            metrics = list()
+            # Dont set anything for BEPort, EDSDirector and IMDirector for V4, not valid
+            if self.conn.performance.is_v4:
+                if pc_key in [pc.BE_PORT, pc.IM_DIRECTOR,
+                              pc.EDS_DIRECTOR]:
+                    self.log_debug(msg=(
+                        'Category {c} not supported in V4, removing from list '
+                        'of enabled category targets.'.format(c=pc_key)))
+                    continue
+            # Dont set anything for EMDirector for V3, not valid
+            else:
+                if pc_key in [pc.EM_DIRECTOR]:
+                    self.log_debug(msg=(
+                        'Category {c} not supported in V3, removing from list '
+                        'of enabled category targets.'.format(c=pc_key)))
+                    continue
 
+            metrics = list()
             perf_cat = perf_map.get(pc_key)
             input_key = perf_cat.get(pc.INPUT_KEY)
             input_setting = self.helper.get_arg(input_key)
@@ -223,7 +238,7 @@ class PMaxSplunk:
 
         # 2. Check if Unisphere is responding & is required min version
         __, major_version = self.conn.common.get_uni_version()
-        if int(major_version) != 92:
+        if int(major_version) > 100:
             msg = ('Unisphere is not required v9.2.x version, please upgrade '
                    'Unisphere to required version. Exiting metrics collection '
                    'run.')
@@ -263,7 +278,7 @@ class PMaxSplunk:
                 'Passed performance timestamp recency check: {t}.'.format(
                     t=self.timestamp))
 
-    def _merge_dicts(self, *dict_args):
+    def _merge_dicts(self, *dict_args, timestamp=None):
         """Merge one or more dictionaries together.
 
         This function will convert camel-case to snake-case and make
@@ -289,31 +304,40 @@ class PMaxSplunk:
                             new_key = consistent_keys.get(new_key)
                         result[new_key] = v
 
-        result['timestamp'] = self.timestamp
+        result['timestamp'] = timestamp if timestamp else self.timestamp
         result['array_id'] = self.array_id
 
         return json.dumps(result)
 
-    @staticmethod
-    def _extract_nested_dicts(src_dict):
-        """Extract nested dicts so all values are at outermost level.
+    def _flatten_dict(self, src_dict):
+        """Recursively flatten dictionary.
+
+        This is required from Unisphere 10.x and newer because responses can
+        now contain up to four layers deep of nested dictionaries. Iteratively
+        cycling through these was no longer feasible
 
         :param src_dict: source data -- dict
         :returns: exploded data -- dict
         """
-        response_dict = dict()
-        if src_dict:
-            for k, v in src_dict.items():
-                if v and isinstance(v, dict):
-                    for k2, v2 in v.items():
-                        response_dict['{k}_{k2}'.format(k=k, k2=k2)] = v2
-                elif v and isinstance(v, list):
-                    if isinstance(v[0], dict):
-                        for k2, v2 in v[0].items():
-                            response_dict['{k}_{k2}'.format(k=k, k2=k2)] = v2
-                else:
-                    response_dict[k] = v
-        return response_dict
+        def items():
+            if isinstance(src_dict, dict):
+                for k, v in src_dict.items():
+                    if isinstance(v, dict):
+                        for sk, sv in self._flatten_dict(v).items():
+                            yield k + '_' + sk, sv
+                    elif isinstance(v, list):
+                        for x in v:
+                            if isinstance(x, dict):
+                                for sk, sv in self._flatten_dict(v).items():
+                                    yield k + '_' + sk, sv
+                    else:
+                        yield k, v
+            elif isinstance(src_dict, list):
+                info = src_dict[0]
+                for k, v in info.items():
+                    yield k, v
+
+        return dict(items())
 
     def _extract_array_alert_summary(self, summary):
         """Extract array alert summary from PyU4V response.
@@ -473,7 +497,7 @@ class PMaxSplunk:
         """
         self.log_debug('Collecting array data.')
         # 1. Get array SLO provisioning info
-        array_slo_pro = self._extract_nested_dicts(
+        array_slo_pro = self._flatten_dict(
             self.conn.provisioning.get_array())
         if not array_slo_pro:
             array_slo_pro = {
@@ -482,7 +506,7 @@ class PMaxSplunk:
         array_slo_pro['reporting_level'] = 'Array'
 
         # 2. Get array System info
-        array_system = self._extract_nested_dicts(
+        array_system = self._flatten_dict(
             self.conn.common.get_array(self.array_id))
         if not array_system:
             array_system = {
@@ -573,26 +597,40 @@ class PMaxSplunk:
         self.log_debug(
             'SRP: {s} | Collecting SRP data.'.format(s=srp_id))
         # Get SRP details
-        srp_details = self._extract_nested_dicts(
+        srp_details = self._flatten_dict(
             self.conn.provisioning.get_srp(srp=srp_id))
         srp_details['reporting_level'] = 'SRP'
 
+        return self._merge_dicts(srp_details)
+
+    def get_srp_performance_info(self, srp_id):
+        """Get all SRP details for a given SRP.
+
+        We can no longer rely on SRP ID from sloprovisioning endpoints,
+        performance endpoints required SRP ID and emulation (FBA/CKD) for V4.
+
+        :param srp_id: SRP ID -- str
+        :returns: SRP performance details -- JSON
+        """
         # Get SRP performance metrics
         metrics = self.enabled_metrics.get(pc.SRP)
-        srp_performance = self.perf.get_storage_resource_pool_stats(
-            metrics=metrics, srp_id=srp_id, start_time=self.timestamp,
-            end_time=self.timestamp)
 
+        srp_info = dict()
+        srp_info['reporting_level'] = 'SRP_PERFORMANCE'
+        srp_info['srp_performance_id'] = srp_id
+        srp_info['srp_src_id'] = srp_id.split(' ')[0]
+
+        srp_performance = self.perf.get_storage_resource_pool_stats(
+            metrics=metrics, srp_id=srp_id,
+            start_time=self.timestamp, end_time=self.timestamp)
+        srp_performance = self._process_performance_response(srp_performance)
         if not srp_performance:
             msg = 'No SRP performance data available.'
             self.log_warning('SRP: {s} | {m}'.format(s=srp_id, m=msg))
             srp_performance = {
                 'srp_perf_details': False, 'srp_perf_message': msg}
-        else:
-            srp_performance = self._process_performance_response(
-                srp_performance)
 
-        return self._merge_dicts(srp_details, srp_performance)
+        return self._merge_dicts(srp_info, srp_performance)
 
     def get_storage_group_details(self, storage_group_id):
         """Get all Storage Group details for a given Storage Group.
@@ -605,7 +643,7 @@ class PMaxSplunk:
                 s=storage_group_id))
         # Get SG details
         sg_details = self.conn.provisioning.get_storage_group(storage_group_id)
-        sg_details = self._extract_nested_dicts(sg_details)
+        sg_details = self._flatten_dict(sg_details)
         sg_details['service_level'] = sg_details.get('service_level', 'NONE')
         sg_details['workload'] = sg_details.get('workload', 'NONE')
         sg_details['srp'] = sg_details.get('srp', 'NONE')
@@ -637,7 +675,7 @@ class PMaxSplunk:
         """
         self.log_debug(
             'Director: {d} | Collecting Director data.'.format(d=director_id))
-        dir_details = self.conn.provisioning.get_director(director=director_id)
+        dir_details = self.conn.system.get_director(director=director_id)
         dir_details['reporting_level'] = 'Director'
         if dir_details.get('srdf_groups'):
             dir_details['num_srdf_groups'] = len(dir_details['srdf_groups'])
@@ -649,7 +687,7 @@ class PMaxSplunk:
             perf_f = self.perf.get_backend_director_stats
             metrics = self.enabled_metrics.get(pc.BE_DIRECTOR)
             dir_details['director_type'] = 'BE'
-        elif any(x in director_id for x in ['EF', 'FA', 'FE', 'SE']):
+        elif any(x in director_id for x in ['EF', 'FA', 'FE', 'SE', 'OR']):
             perf_f = self.perf.get_frontend_director_stats
             metrics = self.enabled_metrics.get(pc.FE_DIRECTOR)
             dir_details['director_type'] = 'FE'
@@ -665,6 +703,10 @@ class PMaxSplunk:
             perf_f = self.perf.get_eds_director_stats
             metrics = self.enabled_metrics.get(pc.EDS_DIRECTOR)
             dir_details['director_type'] = 'EDS'
+        elif any(x in director_id for x in ['EM']):
+            perf_f = self.perf.get_em_director_stats
+            metrics = self.enabled_metrics.get(pc.EM_DIRECTOR)
+            dir_details['director_type'] = 'EM'
         else:
             msg = (
                 'Director: {d} | Not able to determine director type'.format(
@@ -689,6 +731,50 @@ class PMaxSplunk:
 
         return self._merge_dicts(dir_details, dir_performance)
 
+    def get_director_or_rdf_details(self, director_id):
+        """Get OR director RDF details for a given director.
+
+        :param director_id: director ID -- str
+        :returns: director details -- JSON
+        """
+        self.log_debug(
+            'OR Director: {d} | Collecting RDF Director data.'.format(d=director_id))
+        dir_details = self.conn.system.get_director(director=director_id)
+        dir_details['reporting_level'] = 'Director'
+        if dir_details.get('srdf_groups'):
+            dir_details['num_srdf_groups'] = len(dir_details['srdf_groups'])
+            dir_details.pop('srdf_groups')
+
+        perf_f, metrics, dir_performance = None, None, None
+
+        if any(x in director_id for x in ['OR']):
+            perf_f = self.perf.get_rdf_director_stats
+            metrics = self.enabled_metrics.get(pc.RDF_DIRECTOR)
+            dir_details['director_type'] = 'RDF'
+        else:
+            msg = (
+                'Director: {d} | Not able to determine director type'.format(
+                    d=director_id))
+            self.log_error(msg, raise_exception=True,
+                           exc=exception.VolumeBackendAPIException)
+
+        if perf_f:
+            dir_performance = perf_f(
+                metrics=metrics, director_id=director_id,
+                start_time=self.timestamp, end_time=self.timestamp)
+
+        if not dir_performance:
+            msg = 'No OR Director RDF performance data available.'
+            self.log_warning(
+                'Director: {d} | {m}'.format(d=director_id, m=msg))
+            dir_performance = {
+                'dir_perf_details': False, 'dir_perf_message': msg}
+        else:
+            dir_performance = self._process_performance_response(
+                dir_performance)
+
+        return self._merge_dicts(dir_details, dir_performance)
+
     def get_port_details(self, port_key):
         """Get Port details for a given Port.
 
@@ -701,7 +787,7 @@ class PMaxSplunk:
             'Port: {d}:{p} | Collecting Port data.'.format(
                 d=director_id, p=port_id))
 
-        port_details = self.conn.provisioning.get_director_port(
+        port_details = self.conn.system.get_director_port(
             director=director_id, port_no=port_id)
         port_details = port_details.get('symmetrixPort')
         port_details['reporting_level'] = 'Port'
@@ -716,11 +802,11 @@ class PMaxSplunk:
             perf_f = self.perf.get_backend_port_stats
             metrics = self.enabled_metrics.get(pc.BE_PORT)
             port_details['port_dir_type'] = 'Back End Director'
-        elif any(x in director_id for x in ['EF', 'FA', 'FE', 'SE']):
+        elif any(x in director_id for x in ['EF', 'FA', 'FE', 'SE', 'OR']):
             perf_f = self.perf.get_frontend_port_stats
             metrics = self.enabled_metrics.get(pc.FE_PORT)
             port_details['port_dir_type'] = 'Front End Director'
-        elif any(x in director_id for x in ['RF', 'RE']):
+        elif any(x in director_id for x in ['RF', 'RE', 'OR']):
             perf_f = self.perf.get_rdf_port_stats
             metrics = self.enabled_metrics.get(pc.RDF_PORT)
             port_details['port_dir_type'] = 'RDF Director'
@@ -1009,7 +1095,7 @@ class PMaxSplunk:
         iscsi_dir_list = self.conn.system.get_director_list(iscsi_only=True)
         iscsi_dir_ports = list()
         for iscsi_dir in iscsi_dir_list:
-            port_list = self.conn.provisioning.get_director_port_list(
+            port_list = self.conn.system.get_director_port_list(
                 iscsi_dir)
             for port in port_list:
                 ip_ints = self.conn.system.get_ip_interface_list(
@@ -1040,7 +1126,7 @@ class PMaxSplunk:
         int_details['director_id'] = director_id
         int_details['port_id'] = port_id
 
-        dir_details = self.conn.provisioning.get_director_port(
+        dir_details = self.conn.system.get_director_port(
             director_id, str(int_details.get('iscsi_target_port')))
         dir_details = dir_details.get('symmetrixPort')
         int_details['iscsi_target_iqn'] = dir_details.get('identifier', 'None')
@@ -1083,7 +1169,7 @@ class PMaxSplunk:
         """
         director_id = port_key['directorId']
         port_id = port_key['portId']
-        tgt_details = self.conn.provisioning.get_director_port(
+        tgt_details = self.conn.system.get_director_port(
             director=director_id, port_no=port_id)
 
         tgt_details = tgt_details.get('symmetrixPort')
@@ -1099,8 +1185,8 @@ class PMaxSplunk:
                 i=tgt_details.get('identifier')))
 
         metrics = self.enabled_metrics.get(pc.ISCSI_TARGET)
-        tgt_performance = self.perf.get_iscsi_target_stats(
-            metrics=metrics, iscsi_target_id=tgt_details.get('identifier'))
+        tgt_performance = self.perf.get_endpoint_stats(
+            metrics=metrics, endpoint_id=tgt_details.get('identifier'))
 
         if not tgt_performance:
             msg = 'No iSCSI target performance data available.'
@@ -1158,7 +1244,7 @@ class PMaxSplunk:
             'RDFG: {r} | Collecting RDF Group data.'.format(
                 r=rdf_group_number))
         rdfg_details = self.conn.replication.get_rdf_group(rdf_group_number)
-        rdfg_details = self._extract_nested_dicts(rdfg_details)
+        rdfg_details = self._flatten_dict(rdfg_details)
         rdfg_details['reporting_level'] = 'RDF Group'
 
         rdfg_performance = dict()
@@ -1314,13 +1400,10 @@ class PMaxSplunk:
         if record_details.get('message'):
             record_details['message'] = record_details['message'].strip()
 
-        standard_response = self._merge_dicts(record_details)
-
         # We want to use the timestamp from the audit log instead of the
         # usual interval timestamp, convert to milliseconds since epoch
+        timestamp = None
         if record_details.get('entry_date'):
-            standard_response = json.loads(standard_response)
-            standard_response['timestamp'] = (
-                standard_response.get('entry_date') * 1000)
+            timestamp = record_details.get('entry_date') * 1000
 
-        return json.dumps(standard_response)
+        return self._merge_dicts(record_details, timestamp=timestamp)
