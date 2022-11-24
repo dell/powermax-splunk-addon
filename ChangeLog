@@ -1,3 +1,10 @@
+PowerMax for Splunk 4.0 - November 2022
+============================================
+- Add new EM Director.
+- Handle new FE Director type OR
+- Update documentation for performance metrics based upon v3/v4 hardware
+- Remove BEPort for v4 hardware
+
 PowerMax for Splunk 3.1 - 20th May 2022
 ============================================
 - Upgrade TA to jQuery 3.5.

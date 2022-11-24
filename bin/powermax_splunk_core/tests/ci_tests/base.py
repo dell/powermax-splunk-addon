@@ -18,7 +18,7 @@ import json
 import re
 import testtools
 
-import PyU4V.utils.performance_category_map as pcm # NOQA
+import PyU4V
 
 from . import splunk_fakes
 
@@ -39,8 +39,14 @@ class TestBaseTestCase(testtools.TestCase):
         super().setUp()
         self.helper = splunk_fakes.FakeSplunkHelper()
         self.writer = splunk_fakes.FakeSplunkWriter()
-        self.pcm = pcm.performance_data
         self.pkc = pkc.consistent_keys
+        self.conn = PyU4V.U4VConn(
+            username=self.helper.get_arg('u4v_username'),
+            password=self.helper.get_arg('u4v_password'),
+            server_ip=self.helper.get_arg('u4v_ip_address'),
+            port=self.helper.get_arg('u4v_port'),
+            verify=self.helper.get_arg('enable_ssl'),
+            array_id=self.helper.get_arg('u4v_vmax_id'))
 
     def tearDown(self):
         """Tear down after CI test has finished."""
@@ -119,7 +125,10 @@ class TestBaseTestCase(testtools.TestCase):
         """
         if metric_type in [ALL, KPI]:
             metrics_key = pc.PERFORMANCE_KEY_MAP[map_key][pc.U4P_CAT]
-            metrics = self.pcm[metrics_key][metric_type]
+            kpi = bool(metric_type == KPI)
+            metrics = self.conn.performance.get_performance_metrics_list(
+                category=metrics_key, kpi_only=kpi,
+                array_id=self.conn.array_id)
             metrics = self._convert_metrics_snake_case(metrics)
             self.assertNotEqual([], metrics)
         elif metric_type == CUSTOM:
@@ -147,6 +156,27 @@ class TestBaseTestCase(testtools.TestCase):
         for metric in metrics:
             self.assertIn(metric, event_keys)
 
+    def run_srp_event_collection_asserts(self, map_key, metric_type):
+        """Load pickle event data and run assertions on contents.
+
+        :param map_key: the key used to retrieve metrics from PyU4V -- str
+        :param metric_type: the type of metrics in use (ALL, KPI, etc.) -- str
+        """
+        event_data = self.load_event_data()
+        for e in event_data:
+            event, event_keys = self.load_event(e)
+            try:
+                self.assertIn(event.get('reporting_level'),
+                              ['SRP', 'SRP_PERFORMANCE'])
+            except AssertionError:
+                pass
+            # self.assertEqual(reporting_level, event.get('reporting_level'))
+
+            if event.get('reporting_level') == 'SRP_PERFORMANCE':
+                metrics = self.load_metrics(map_key, metric_type)
+                for metric in metrics:
+                    self.assertIn(metric, event_keys)
+
     def run_director_event_collection_asserts(self, metric_type):
         """Load pickle event data and run assertions on contents.
 
@@ -169,6 +199,8 @@ class TestBaseTestCase(testtools.TestCase):
                 map_key = pc.IM_DIRECTOR
             elif director_type == 'EDS':
                 map_key = pc.EDS_DIRECTOR
+            elif director_type == 'EM':
+                map_key = pc.EM_DIRECTOR
 
             metrics = self.load_metrics(map_key, metric_type)
             for metric in metrics:

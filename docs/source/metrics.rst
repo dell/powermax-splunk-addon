@@ -38,6 +38,7 @@ the metric is a KPI or not.
     metrics/fe_dir
     metrics/be_dir
     metrics/rdf_dir
+    metrics/em_dir
     metrics/im_dir
     metrics/eds_dir
     metrics/fe_port
@@ -48,6 +49,6 @@ the metric is a KPI or not.
     metrics/port_group
     metrics/masking_view
     metrics/ip_interface
-    metrics/iscsi_target
+    metrics/endpoint
     metrics/rdfa
     metrics/rdfs

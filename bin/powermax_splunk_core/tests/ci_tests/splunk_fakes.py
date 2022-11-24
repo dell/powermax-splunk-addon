@@ -85,6 +85,7 @@ class FakeSplunkHelper(object):
             'select_rdf_dir_metrics': c['select_rdf_dir_metrics'],
             'select_im_dir_metrics': c['select_im_dir_metrics'],
             'select_eds_dir_metrics': c['select_eds_dir_metrics'],
+            'select_em_dir_metrics': c['select_em_dir_metrics'],
             'select_fe_port_metrics': c['select_fe_port_metrics'],
             'select_be_port_metrics': c['select_be_port_metrics'],
             'select_rdf_port_metrics': c['select_rdf_port_metrics'],
@@ -208,16 +209,16 @@ class FakeSplunkWriter(object):
 
         file_path = Path.joinpath(CWD, PICKLE_PATH)
         if file_path.exists():
-            events = pickle.load(open(file_path, 'rb'))
-            assert type(events) is list
-            assert events
-            events.append(data)
+            with open(file_path, 'rb') as open_file:
+                events = pickle.load(open_file)
+                assert type(events) is list
+                assert events
+                events.append(data)
         else:
             events = [data]
 
-        out_file = open(file_path, 'wb')
-        pickle.dump(events, out_file)
-        out_file.close()
+        with open(file_path, 'wb') as out_file:
+            pickle.dump(events, out_file)
 
         assert file_path.exists()
 
@@ -231,8 +232,9 @@ class FakeSplunkWriter(object):
         file_path = Path.joinpath(CWD, PICKLE_PATH)
         if file_path.exists():
             try:
-                events = pickle.load(open(file_path, 'rb'))
-                assert type(events) is list
+                with open(file_path, 'rb') as open_file:
+                    events = pickle.load(open_file)
+                    assert type(events) is list
             except OSError as e:
                 raise OSError(
                     'There was a problem loading pickle data.') from e

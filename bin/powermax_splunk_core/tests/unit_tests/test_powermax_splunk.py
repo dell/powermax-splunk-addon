@@ -94,13 +94,13 @@ class PowerMaxSplunkTest(testtools.TestCase):
         self.helper.arg_mapping['select_array'] = True
         self.helper.arg_mapping['select_srp'] = 'srp_kpi'
         self.helper.arg_mapping['select_sg'] = 'sg_custom'
-        self.helper.arg_mapping['select_sg_metrics'] = 'ResponseTime'
+        self.helper.arg_mapping['select_sg_metrics'] = 'BEIOs, BEReadReqs'
 
         self.spl._set_enabled_metrics()
         self.assertEqual('ALL', self.spl.enabled_metrics['array'])
         self.assertEqual('KPI', self.spl.enabled_metrics['srp'])
         self.assertIsInstance(self.spl.enabled_metrics['storage_group'], list)
-        self.assertEqual(['ResponseTime'],
+        self.assertEqual(['BEIOs', 'BEReadReqs'],
                          self.spl.enabled_metrics['storage_group'])
 
     def test_load_custom_metrics_invalid_metric_kpi_return(self):
@@ -135,7 +135,8 @@ class PowerMaxSplunkTest(testtools.TestCase):
     def test_validate_configuration_invalid_uni_version(self):
         """Test _validate_configuration with incorrect Unisphere version."""
         with mock.patch.object(self.spl.conn.common,
-                               'get_uni_version', return_value=(None, 91)):
+                               'get_resource',
+                               return_value={'version': 'V9.1.0.0'}):
             self.assertRaises(EnvironmentError,
                               self.spl._validate_configuration)
 
@@ -181,20 +182,20 @@ class PowerMaxSplunkTest(testtools.TestCase):
         """Test _extract_nested_dicts."""
         nested_dict = {'key_a': {'nest_a': 'value_a', 'nest_b': 'value_b'}}
         ref_dict = {'key_a_nest_a': 'value_a', 'key_a_nest_b': 'value_b'}
-        return_dict = self.spl._extract_nested_dicts(nested_dict)
+        return_dict = self.spl._flatten_dict(nested_dict)
         self.assertEqual(ref_dict, return_dict)
 
     def test_extract_nested_dicts_with_list(self):
         """Test _extract_nested_dicts with nested dict in list."""
         nested_dict = {'key_a': [{'nest_a': 'value_a', 'nest_b': 'value_b'}]}
         ref_dict = {'key_a_nest_a': 'value_a', 'key_a_nest_b': 'value_b'}
-        return_dict = self.spl._extract_nested_dicts(nested_dict)
+        return_dict = self.spl._flatten_dict(nested_dict)
         self.assertEqual(ref_dict, return_dict)
 
     def test_extract_nested_dicts_no_nest(self):
         """Test _extract_nested_dicts no nested dicts present."""
         no_nest_dict = {'key_a': 'value_a', 'key_b': 'value_b'}
-        return_dict = self.spl._extract_nested_dicts(no_nest_dict)
+        return_dict = self.spl._flatten_dict(no_nest_dict)
         self.assertEqual(no_nest_dict, return_dict)
 
     def test_extract_array_alert_summary(self):
@@ -495,13 +496,14 @@ class PowerMaxSplunkTest(testtools.TestCase):
         array_id = self.data.U4P_POWERMAX_ID_A
         srp_id = self.data.srp_id_a
         ref_response = {
-            'num_of_disk_groups': 1, 'srp_id': srp_id,
-            'srp_capacity_usable_total_tb': 24.45, 'reserved_cap_percent': 10,
+            'array_id': array_id,
+            'num_of_disk_groups': 1,
+            'reporting_level': 'SRP',
+            'reserved_cap_percent': 10,
+            'srp_capacity_usable_total_tb': 24.45,
             'srp_efficiency_overall_efficiency_ratio_to_one': 3179.4,
-            'reporting_level': 'SRP', 'array_id': array_id,
-            'start_date': str(self.data.TIMESTAMP),
-            'end_date': str(self.data.TIMESTAMP),
-            'percent_busy': 0.027849833, 'timestamp': self.data.TIMESTAMP}
+            'srp_id': srp_id,
+            'timestamp': self.data.TIMESTAMP}
 
         response = self.spl.get_srp_details(srp_id=srp_id)
         self.assertIsInstance(response, str)
@@ -514,7 +516,7 @@ class PowerMaxSplunkTest(testtools.TestCase):
         with mock.patch.object(
                 self.spl.perf, 'get_storage_resource_pool_stats',
                 return_value=dict()):
-            response = self.spl.get_srp_details(srp_id=srp_id)
+            response = self.spl.get_srp_performance_info(srp_id=srp_id)
             self.assertIsInstance(response, str)
             response = json.loads(response)
             self.assertFalse(response['srp_perf_details'])
@@ -1151,7 +1153,7 @@ class PowerMaxSplunkTest(testtools.TestCase):
         """Test get_audit_log_record_details."""
         record_id = '10000'
         mock_response = self.data.get_audit_log
-        mock_response.pop('username')
+        mock_response['objectList'][0].pop('username')
         with mock.patch.object(
                 self.spl.conn.system, 'get_audit_log_record',
                 return_value=mock_response):

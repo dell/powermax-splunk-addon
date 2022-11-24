@@ -4,13 +4,13 @@ Installation
 Supported Versions
 ------------------
 +---------------------------------+----------------------------------------+
-| **PowerMax for Splunk**         | 3.1                                    |
+| **PowerMax for Splunk**         | 4.0                                    |
 +---------------------------------+----------------------------------------+
-| **Technology Add-On**           | 3.1.0.0                                |
+| **Technology Add-On**           | 4.0.0                                  |
 +---------------------------------+----------------------------------------+
-| **App**                         | 3.1.0.0                                |
+| **App**                         | 4.0.0                                  |
 +---------------------------------+----------------------------------------+
-| **Minimum Unisphere Version**   | 9.2.0.0                                |
+| **Minimum Unisphere Version**   | 10.0.0.0                               |
 +---------------------------------+----------------------------------------+
 | **Array Model**                 | VMAX-3, VMAX AFA, PowerMax             |
 +---------------------------------+----------------------------------------+
@@ -24,12 +24,9 @@ Supported Versions
 +---------------------------------+----------------------------------------+
 
 .. note::
-    To get full support of all features in PowerMax for Splunk 3.x you will
-    need to have your array u-code at level 5978.7xx.xxx (Hickory SR) or newer
-    and use both Solutions Enabler 9.2.1 and Unisphere for PowerMax 9.2.1.
-    PowerMax for Splunk uses new efficiency statistics which are only available
-    in the Hickory SR release. If your array is lower than 5978.7xx.xxx then
-    these statistics will not be reported on in PowerMax for Splunk.
+    For PowerMax 2500 and 8500 models, minimum operating environment of PowerMax OS 10 and Management Software Unisphere
+    for PowerMax version 10. For older PowerMax models Unisphere 10 is required.
+
 
 .. note::
     PowerMax for Splunk has been tested and verified only against Python 3.x.

@@ -220,6 +220,16 @@ fields = [
         )
     ),
     field.RestField(
+        'select_em_dir_metrics',
+        required=False,
+        encrypted=False,
+        default=None,
+        validator=validator.String(
+            min_len=0,
+            max_len=8192,
+        )
+    ),
+    field.RestField(
         'select_port',
         required=False,
         encrypted=False,

@@ -12,10 +12,10 @@ from SplunkBase.
 
 setuptools.setup(
     name='PowerMaxSplunkAddOnTestSuite',
-    version='3.0.0.0',
+    version='4.0.0',
     url='https://github.com/dell/splunk/',
     author='Dell Inc. or its subsidiaries',
-    author_email='Michael.Mcaleer@dell.com',
+    author_email='Philip.Sheehan@dell.com',
     description="PowerMax for Splunk standalone install for testing.",
     packages=setuptools.find_packages(),
     install_requires=['requests', 'six', 'urllib3'],
