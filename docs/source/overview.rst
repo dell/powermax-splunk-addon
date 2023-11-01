@@ -31,10 +31,9 @@ for both code can be viewed and downloaded from the links below:
 - `Dell EMC PowerMax App for Splunk Enterprise source`_
 
 
-What's New in PowerMax for Splunk 3.2
+What's New in PowerMax for Splunk 3.3
 -------------------------------------
-- Remove install_source_checksum
-- Add .readthedocs.yaml file required for building project on Read the Docs
+- check_for_addon_builder_version update from 4.1.0 -> 4.1.3
 
 Contact
 -------
