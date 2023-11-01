@@ -24,9 +24,9 @@ copyright = '2021 Dell Inc. or its subsidiaries.'
 author = 'Dell'
 
 # The short X.Y version.
-version = u'3.0'
+version = u'3.3'
 # The full version, including alpha/beta/rc tags
-release = '3.0.0.0'
+release = '3.3.0.0'
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -49,7 +49,7 @@ todo_include_todos = False
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.autosectionlabel'
+    'sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.autosectionlabel','sphinx_rtd_theme'
 ]
 
 autosectionlabel_prefix_document = True
