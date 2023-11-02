@@ -63,7 +63,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Options for HTML output -------------------------------------------------
 
 # Add any paths that contain templates here, relative to this directory.
-#templates_path = ['rtd_theme', ]
+templates_path = ['rtd_theme', ]
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
