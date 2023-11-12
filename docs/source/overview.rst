@@ -31,13 +31,10 @@ for both code can be viewed and downloaded from the links below:
 - `Dell EMC PowerMax App for Splunk Enterprise source`_
 
 
-What's New in PowerMax for Splunk 4.0
--------------------------------------
-- New categories have been added:
-
-    - EM Director
-    - iSCSI Target has been renamed Endpoint
-    - There is a new FE director type called OR
+What's New in PowerMax for Splunk 4.0.1
+---------------------------------------
+- Update builder_version = 4.1.4
+- Update Unisphere for PowerMax Version check to allow 10.1.0.0
 
 Contact
 -------

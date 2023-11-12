@@ -1,5 +1,5 @@
-Welcome to PowerMax for Splunk 4.0!
-===================================
+Welcome to PowerMax for Splunk 4.0.1!
+=====================================
 
 | |Maintenance| |OpenSource| |AskUs| |Test| |Build| |Docs|
 | |Language| |PyVersions| |Unisphere| |Platform| |License|
@@ -31,11 +31,9 @@ The TA and App can be downloaded from the links below:
 Version Info
 ------------
 +---------------------------------+----------------------------------------+
-| **PowerMax for Splunk**         | 4.0                                    |
+| **PowerMax for Splunk**         | 4.0.1                                  |
 +---------------------------------+----------------------------------------+
-| **Technology Add-On**           | 4.0.0                                  |
-+---------------------------------+----------------------------------------+
-| **App**                         | 4.0.0                                  |
+| **Technology Add-On**           | 4.0.1                                  |
 +---------------------------------+----------------------------------------+
 | **Minimum Unisphere Version**   | 10.0.0.0                               |
 +---------------------------------+----------------------------------------+

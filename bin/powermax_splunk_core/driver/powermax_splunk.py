@@ -238,10 +238,13 @@ class PMaxSplunk:
 
         # 2. Check if Unisphere is responding & is required min version
         __, major_version = self.conn.common.get_uni_version()
-        if int(major_version) > 100:
-            msg = ('Unisphere is not required v9.2.x version, please upgrade '
-                   'Unisphere to required version. Exiting metrics collection '
-                   'run.')
+        self.log_info(major_version)
+        if int(major_version) < 100:
+            msg = ('Unisphere is not required version, please upgrade '
+                   'Unisphere to required version. '
+                   'Please see '
+                   'https://powermax-for-splunk.readthedocs.io/en/latest/'
+                   'Exiting metrics collection run')
             self.log_critical(msg, raise_exception=True, exc=EnvironmentError)
         else:
             self.log_info('Passed Unisphere version check.')
