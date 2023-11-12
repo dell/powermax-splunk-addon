@@ -5,7 +5,7 @@
     "id": {
       "group": null,
       "name": "TA-DellEMC_VMAX",
-      "version": "4.0.0"
+      "version": "4.0.1"
     },
     "author": [
       {
@@ -14,7 +14,7 @@
         "company": "Dell EMC"
       }
     ],
-    "releaseDate": "November 2022",
+    "releaseDate": "November 2023",
     "description": "REST API based input for polling summary & performance data from Dell EMC PowerMax storage arrays.",
     "classification": {
       "intendedAudience": null,
