@@ -323,7 +323,7 @@ information as possible about the problem including:
 
 .. URL LINKS
 
-.. _ReadTheDocs: https://powermax-splunk-addon.readthedocs.io/en/latest/
+.. _ReadTheDocs: https://powermax-for-splunk.readthedocs.io/en/latest/overview.html
 .. _PyU4V: https://github.com/dell/PyU4V
 .. _`Dell EMC PowerMax Add-on for Splunk Enterprise`: https://splunkbase.splunk.com/app/3416/
 .. _`Dell EMC PowerMax App for Splunk Enterprise`: https://splunkbase.splunk.com/app/3467/
