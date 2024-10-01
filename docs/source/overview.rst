@@ -31,10 +31,9 @@ for both code can be viewed and downloaded from the links below:
 - `Dell EMC PowerMax App for Splunk Enterprise source`_
 
 
-What's New in PowerMax for Splunk 4.0.1
+What's New in PowerMax for Splunk 4.0.2
 ---------------------------------------
-- Update builder_version = 4.1.4
-- Update Unisphere for PowerMax Version check to allow 10.1.0.0
+- Update for Splunk Cloud compatibility
 
 Contact
 -------
