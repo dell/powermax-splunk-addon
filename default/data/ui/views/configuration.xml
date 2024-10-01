@@ -1,4 +1,4 @@
-<?xml version="1.1"?>
+<?xml version="1.0"?>
 <view template="TA-DellEMC_VMAX:templates/base.html" type="html" isDashboard="False">
     <label>Configuration</label>
 </view>

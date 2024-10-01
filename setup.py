@@ -12,7 +12,7 @@ from SplunkBase.
 
 setuptools.setup(
     name='PowerMaxSplunkAddOnTestSuite',
-    version='4.0.0',
+    version='4.0.2',
     url='https://github.com/dell/splunk/',
     author='Dell Inc. or its subsidiaries',
     author_email='Philip.Sheehan@dell.com',
