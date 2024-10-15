@@ -74,7 +74,7 @@ class RestRequests(object):
         session = requests.session()
         session.headers = self.headers if not headers else headers
         session.auth = HTTPBasicAuth(self.username, self.password)
-        session.verify = self.verify_ssl
+        session.verify = True
         return session
 
     def rest_request(self, target_url, method,

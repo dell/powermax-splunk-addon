@@ -59,8 +59,6 @@ class FakeSplunkHelper(object):
             'u4v_password': c['u4v_password'],
             'u4v_vmax_id': c['u4v_vmax_id'],
             'rest_request_timeout': c['rest_request_timeout'],
-            'enable_ssl': self._bool_check(c['enable_ssl']),
-            'ssl_cert_location': c['ssl_cert_location'],
             'interval': c['interval'],
             'select_array': self._bool_check(c['select_array']),
             'select_srp': self._bool_check(c['select_srp']),

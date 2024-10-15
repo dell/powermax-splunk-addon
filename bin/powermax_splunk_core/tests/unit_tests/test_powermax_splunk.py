@@ -64,24 +64,6 @@ class PowerMaxSplunkTest(testtools.TestCase):
         # Check REST timeout
         self.assertEqual(self.data.U4P_REST_TIMEOUT, self.rest_client.timeout)
 
-    def test_establish_pyu4v_connection_ssl_true_no_path(self):
-        """Test _establish_pyu4v_connection with SSL cert location set."""
-        self.helper.arg_mapping['ssl_cert_location'] = None
-        with mock.patch.object(
-                rest_requests.RestRequests, 'establish_rest_session',
-                return_value=splunk_fakes.FakeRequestsSession()):
-            temp_spl = PMaxSplunk(helper=self.helper, event_writer=self.writer)
-            self.assertTrue(temp_spl.conn.rest_client.verify_ssl)
-
-    def test_establish_pyu4v_connection_ssl_disabled(self):
-        """Test _establish_pyu4v_connection with SSL disabled."""
-        self.helper.arg_mapping['enable_ssl'] = False
-        with mock.patch.object(
-                rest_requests.RestRequests, 'establish_rest_session',
-                return_value=splunk_fakes.FakeRequestsSession()):
-            temp_spl = PMaxSplunk(helper=self.helper, event_writer=self.writer)
-            self.assertFalse(temp_spl.conn.rest_client.verify_ssl)
-
     def test_is_category_enabled_legacy_bool(self):
         """Test _is_category_enabled legacy config setting True."""
         self.helper.arg_mapping['select_array'] = True

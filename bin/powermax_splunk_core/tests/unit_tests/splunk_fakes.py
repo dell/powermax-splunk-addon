@@ -396,8 +396,6 @@ class FakeSplunkHelper(object):
             'u4v_password': scd.U4P_PASSWORD,
             'u4v_vmax_id': scd.U4P_POWERMAX_ID_A,
             'rest_request_timeout': scd.U4P_REST_TIMEOUT,
-            'enable_ssl': scd.U4P_ENABLE_SSL,
-            'ssl_cert_location': scd.U4P_SSL_CERT_LOC,
             'interval': scd.SPLUNK_INTERVAL,
             'select_array': scd.SELECT_ARRAY,
             'select_srp': scd.SELECT_SRP,

@@ -1,6 +1,6 @@
-PowerMax for Splunk 4.0.2 - September 2024
+PowerMax for Splunk 5.0.0 - October 2024
 ============================================
-- Repackage for Splunk Compatibility
+- Disable SSL Configuration and set as always on
 
 PowerMax for Splunk 4.0.1 - November 2023
 ============================================

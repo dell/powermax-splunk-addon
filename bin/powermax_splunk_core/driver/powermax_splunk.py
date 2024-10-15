@@ -63,13 +63,7 @@ class PMaxSplunk:
         rest_timeout = float(self.helper.get_arg('rest_request_timeout'))
 
         # SSL Setting
-        enable_ssl = self.helper.get_arg('enable_ssl')
-        ssl_cert_location = self.helper.get_arg('ssl_cert_location')
         ssl_verify = True
-        if enable_ssl and ssl_cert_location:
-            ssl_verify = ssl_cert_location
-        elif not enable_ssl:
-            ssl_verify = False
 
         # Initialise connection and set timeout value
         conn = PyU4V.U4VConn(

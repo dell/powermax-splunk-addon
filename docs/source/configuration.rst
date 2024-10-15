@@ -77,22 +77,6 @@ Unisphere Config
 +--------------+--------------+-----------------------------------------------+
 | Array ID     | ``None``     | The 12-digit numerical PowerMax ID.           |
 +--------------+--------------+-----------------------------------------------+
-| Enable SSL   | ``True``     | | If you require end-to-end SSL communication |
-|              |              | | between Splunk and Unisphere. Uncheck to    |
-|              |              | | disable SSL entirely. See 'SSL              |
-|              |              | | Configuration' section in 'Installation'    |
-|              |              | | for more information on SSL set-up.         |
-+--------------+--------------+-----------------------------------------------+
-| | SSL Cert   | ``None``     | | If ‘Enable SSL’ is enabled, this option has |
-| | Location   |              | | two behaviours:                             |
-|              |              | | 1. If left blank, Splunk will search the    |
-|              |              | | system certs bundle for a valid Unisphere   |
-|              |              | | cert.                                       |
-|              |              | | 2. If a local path is provided, this is the |
-|              |              | | path Splunk will use to access the          |
-|              |              | | Unisphere cert independently of the system  |
-|              |              | | certs bundle.                               |
-+--------------+--------------+-----------------------------------------------+
 | | REST       | ``60``       | | The amount of time Splunk will wait for a   |
 | | Request    |              | | response from Unisphere for any given call  |
 | | Timeout    |              | | before timing out and logging an error.     |

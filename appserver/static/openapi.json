@@ -1,0 +1,1057 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "TA-DellEMC_VMAX",
+        "version": "1.0.0",
+        "description": "Dell EMC PowerMax Add-on for Splunk Enterprise",
+        "contact": {
+            "name": "Philip Sheehan"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://{domain}:{port}/servicesNS/-/TA-DellEMC_VMAX",
+            "variables": {
+                "domain": {
+                    "default": "localhost"
+                },
+                "port": {
+                    "default": "8089"
+                }
+            },
+            "description": "Access via management interface"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "logging": {
+                "type": "object",
+                "properties": {
+                    "loglevel": {
+                        "type": "string",
+                        "enum": [
+                            "DEBUG",
+                            "INFO",
+                            "WARNING",
+                            "ERROR",
+                            "CRITICAL"
+                        ]
+                    }
+                }
+            },
+            "logging_without_name": {
+                "type": "object",
+                "properties": {
+                    "loglevel": {
+                        "type": "string",
+                        "enum": [
+                            "DEBUG",
+                            "INFO",
+                            "WARNING",
+                            "ERROR",
+                            "CRITICAL"
+                        ]
+                    }
+                }
+            },
+            "inputs": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "interval": {
+                        "type": "string"
+                    },
+                    "index": {
+                        "type": "string"
+                    },
+                    "u4v_ip_address": {
+                        "type": "string"
+                    },
+                    "u4v_port": {
+                        "type": "string"
+                    },
+                    "u4v_username": {
+                        "type": "string"
+                    },
+                    "u4v_password": {
+                        "type": "string",
+                        "format": "password"
+                    },
+                    "u4v_vmax_id": {
+                        "type": "string"
+                    },
+                    "rest_request_timeout": {
+                        "type": "string"
+                    },
+                    "select_array": {
+                        "type": "string",
+                        "enum": [
+                            "array_off",
+                            "array_kpi",
+                            "array_custom",
+                            "array_all"
+                        ]
+                    },
+                    "select_array_metrics": {
+                        "type": "string"
+                    },
+                    "select_srp": {
+                        "type": "string",
+                        "enum": [
+                            "srp_off",
+                            "srp_kpi",
+                            "srp_custom",
+                            "srp_all"
+                        ]
+                    },
+                    "select_srp_metrics": {
+                        "type": "string"
+                    },
+                    "select_sg": {
+                        "type": "string",
+                        "enum": [
+                            "sg_off",
+                            "sg_kpi",
+                            "sg_custom",
+                            "sg_all"
+                        ]
+                    },
+                    "select_sg_metrics": {
+                        "type": "string"
+                    },
+                    "select_director": {
+                        "type": "string",
+                        "enum": [
+                            "dir_off",
+                            "dir_kpi",
+                            "dir_custom",
+                            "dir_all"
+                        ]
+                    },
+                    "select_fe_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_be_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_rdf_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_im_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_eds_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_em_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_port": {
+                        "type": "string",
+                        "enum": [
+                            "port_off",
+                            "port_kpi",
+                            "port_custom",
+                            "port_all"
+                        ]
+                    },
+                    "select_fe_port_metrics": {
+                        "type": "string"
+                    },
+                    "select_be_port_metrics": {
+                        "type": "string"
+                    },
+                    "select_rdf_port_metrics": {
+                        "type": "string"
+                    },
+                    "select_pg": {
+                        "type": "string",
+                        "enum": [
+                            "pg_off",
+                            "pg_kpi",
+                            "pg_custom",
+                            "pg_all"
+                        ]
+                    },
+                    "select_pg_metrics": {
+                        "type": "string"
+                    },
+                    "select_iscsi": {
+                        "type": "string",
+                        "enum": [
+                            "iscsi_off",
+                            "iscsi_kpi",
+                            "iscsi_custom",
+                            "iscsi_all"
+                        ]
+                    },
+                    "select_ip_interface_metrics": {
+                        "type": "string"
+                    },
+                    "select_iscsi_target_metrics": {
+                        "type": "string"
+                    },
+                    "select_host": {
+                        "type": "string",
+                        "enum": [
+                            "host_off",
+                            "host_kpi",
+                            "host_custom",
+                            "host_all"
+                        ]
+                    },
+                    "select_host_metrics": {
+                        "type": "string"
+                    },
+                    "select_mv": {
+                        "type": "string",
+                        "enum": [
+                            "mv_off",
+                            "mv_kpi",
+                            "mv_custom",
+                            "mv_all"
+                        ]
+                    },
+                    "select_mv_metrics": {
+                        "type": "string"
+                    },
+                    "select_initiator": {
+                        "type": "string",
+                        "enum": [
+                            "init_off",
+                            "init_kpi",
+                            "init_custom",
+                            "init_all"
+                        ]
+                    },
+                    "select_initiator_metrics": {
+                        "type": "string"
+                    },
+                    "select_rdf": {
+                        "type": "string",
+                        "enum": [
+                            "rdf_off",
+                            "rdf_kpi",
+                            "rdf_custom",
+                            "rdf_all"
+                        ]
+                    },
+                    "select_rdfs_metrics": {
+                        "type": "string"
+                    },
+                    "select_rdfa_metrics": {
+                        "type": "string"
+                    },
+                    "select_metro_dr": {
+                        "type": "string",
+                        "enum": [
+                            "metro_off",
+                            "metro_on"
+                        ]
+                    },
+                    "select_snap_policy": {
+                        "type": "string",
+                        "enum": [
+                            "sp_off",
+                            "sp_on"
+                        ]
+                    },
+                    "select_audit_logs": {
+                        "type": "string",
+                        "enum": [
+                            "audit_off",
+                            "audit_on"
+                        ]
+                    },
+                    "select_alerts": {
+                        "type": "string",
+                        "enum": [
+                            "alerts_off",
+                            "alerts_on"
+                        ]
+                    },
+                    "disabled": {
+                        "type": "string",
+                        "enum": [
+                            "False",
+                            "True"
+                        ]
+                    }
+                }
+            },
+            "inputs_without_name": {
+                "type": "object",
+                "properties": {
+                    "interval": {
+                        "type": "string"
+                    },
+                    "index": {
+                        "type": "string"
+                    },
+                    "u4v_ip_address": {
+                        "type": "string"
+                    },
+                    "u4v_port": {
+                        "type": "string"
+                    },
+                    "u4v_username": {
+                        "type": "string"
+                    },
+                    "u4v_password": {
+                        "type": "string",
+                        "format": "password"
+                    },
+                    "u4v_vmax_id": {
+                        "type": "string"
+                    },
+                    "rest_request_timeout": {
+                        "type": "string"
+                    },
+                    "select_array": {
+                        "type": "string",
+                        "enum": [
+                            "array_off",
+                            "array_kpi",
+                            "array_custom",
+                            "array_all"
+                        ]
+                    },
+                    "select_array_metrics": {
+                        "type": "string"
+                    },
+                    "select_srp": {
+                        "type": "string",
+                        "enum": [
+                            "srp_off",
+                            "srp_kpi",
+                            "srp_custom",
+                            "srp_all"
+                        ]
+                    },
+                    "select_srp_metrics": {
+                        "type": "string"
+                    },
+                    "select_sg": {
+                        "type": "string",
+                        "enum": [
+                            "sg_off",
+                            "sg_kpi",
+                            "sg_custom",
+                            "sg_all"
+                        ]
+                    },
+                    "select_sg_metrics": {
+                        "type": "string"
+                    },
+                    "select_director": {
+                        "type": "string",
+                        "enum": [
+                            "dir_off",
+                            "dir_kpi",
+                            "dir_custom",
+                            "dir_all"
+                        ]
+                    },
+                    "select_fe_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_be_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_rdf_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_im_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_eds_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_em_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_port": {
+                        "type": "string",
+                        "enum": [
+                            "port_off",
+                            "port_kpi",
+                            "port_custom",
+                            "port_all"
+                        ]
+                    },
+                    "select_fe_port_metrics": {
+                        "type": "string"
+                    },
+                    "select_be_port_metrics": {
+                        "type": "string"
+                    },
+                    "select_rdf_port_metrics": {
+                        "type": "string"
+                    },
+                    "select_pg": {
+                        "type": "string",
+                        "enum": [
+                            "pg_off",
+                            "pg_kpi",
+                            "pg_custom",
+                            "pg_all"
+                        ]
+                    },
+                    "select_pg_metrics": {
+                        "type": "string"
+                    },
+                    "select_iscsi": {
+                        "type": "string",
+                        "enum": [
+                            "iscsi_off",
+                            "iscsi_kpi",
+                            "iscsi_custom",
+                            "iscsi_all"
+                        ]
+                    },
+                    "select_ip_interface_metrics": {
+                        "type": "string"
+                    },
+                    "select_iscsi_target_metrics": {
+                        "type": "string"
+                    },
+                    "select_host": {
+                        "type": "string",
+                        "enum": [
+                            "host_off",
+                            "host_kpi",
+                            "host_custom",
+                            "host_all"
+                        ]
+                    },
+                    "select_host_metrics": {
+                        "type": "string"
+                    },
+                    "select_mv": {
+                        "type": "string",
+                        "enum": [
+                            "mv_off",
+                            "mv_kpi",
+                            "mv_custom",
+                            "mv_all"
+                        ]
+                    },
+                    "select_mv_metrics": {
+                        "type": "string"
+                    },
+                    "select_initiator": {
+                        "type": "string",
+                        "enum": [
+                            "init_off",
+                            "init_kpi",
+                            "init_custom",
+                            "init_all"
+                        ]
+                    },
+                    "select_initiator_metrics": {
+                        "type": "string"
+                    },
+                    "select_rdf": {
+                        "type": "string",
+                        "enum": [
+                            "rdf_off",
+                            "rdf_kpi",
+                            "rdf_custom",
+                            "rdf_all"
+                        ]
+                    },
+                    "select_rdfs_metrics": {
+                        "type": "string"
+                    },
+                    "select_rdfa_metrics": {
+                        "type": "string"
+                    },
+                    "select_metro_dr": {
+                        "type": "string",
+                        "enum": [
+                            "metro_off",
+                            "metro_on"
+                        ]
+                    },
+                    "select_snap_policy": {
+                        "type": "string",
+                        "enum": [
+                            "sp_off",
+                            "sp_on"
+                        ]
+                    },
+                    "select_audit_logs": {
+                        "type": "string",
+                        "enum": [
+                            "audit_off",
+                            "audit_on"
+                        ]
+                    },
+                    "select_alerts": {
+                        "type": "string",
+                        "enum": [
+                            "alerts_off",
+                            "alerts_on"
+                        ]
+                    },
+                    "disabled": {
+                        "type": "string",
+                        "enum": [
+                            "False",
+                            "True"
+                        ]
+                    }
+                }
+            },
+            "inputs_without_disabled": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "interval": {
+                        "type": "string"
+                    },
+                    "index": {
+                        "type": "string"
+                    },
+                    "u4v_ip_address": {
+                        "type": "string"
+                    },
+                    "u4v_port": {
+                        "type": "string"
+                    },
+                    "u4v_username": {
+                        "type": "string"
+                    },
+                    "u4v_password": {
+                        "type": "string",
+                        "format": "password"
+                    },
+                    "u4v_vmax_id": {
+                        "type": "string"
+                    },
+                    "rest_request_timeout": {
+                        "type": "string"
+                    },
+                    "select_array": {
+                        "type": "string",
+                        "enum": [
+                            "array_off",
+                            "array_kpi",
+                            "array_custom",
+                            "array_all"
+                        ]
+                    },
+                    "select_array_metrics": {
+                        "type": "string"
+                    },
+                    "select_srp": {
+                        "type": "string",
+                        "enum": [
+                            "srp_off",
+                            "srp_kpi",
+                            "srp_custom",
+                            "srp_all"
+                        ]
+                    },
+                    "select_srp_metrics": {
+                        "type": "string"
+                    },
+                    "select_sg": {
+                        "type": "string",
+                        "enum": [
+                            "sg_off",
+                            "sg_kpi",
+                            "sg_custom",
+                            "sg_all"
+                        ]
+                    },
+                    "select_sg_metrics": {
+                        "type": "string"
+                    },
+                    "select_director": {
+                        "type": "string",
+                        "enum": [
+                            "dir_off",
+                            "dir_kpi",
+                            "dir_custom",
+                            "dir_all"
+                        ]
+                    },
+                    "select_fe_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_be_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_rdf_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_im_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_eds_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_em_dir_metrics": {
+                        "type": "string"
+                    },
+                    "select_port": {
+                        "type": "string",
+                        "enum": [
+                            "port_off",
+                            "port_kpi",
+                            "port_custom",
+                            "port_all"
+                        ]
+                    },
+                    "select_fe_port_metrics": {
+                        "type": "string"
+                    },
+                    "select_be_port_metrics": {
+                        "type": "string"
+                    },
+                    "select_rdf_port_metrics": {
+                        "type": "string"
+                    },
+                    "select_pg": {
+                        "type": "string",
+                        "enum": [
+                            "pg_off",
+                            "pg_kpi",
+                            "pg_custom",
+                            "pg_all"
+                        ]
+                    },
+                    "select_pg_metrics": {
+                        "type": "string"
+                    },
+                    "select_iscsi": {
+                        "type": "string",
+                        "enum": [
+                            "iscsi_off",
+                            "iscsi_kpi",
+                            "iscsi_custom",
+                            "iscsi_all"
+                        ]
+                    },
+                    "select_ip_interface_metrics": {
+                        "type": "string"
+                    },
+                    "select_iscsi_target_metrics": {
+                        "type": "string"
+                    },
+                    "select_host": {
+                        "type": "string",
+                        "enum": [
+                            "host_off",
+                            "host_kpi",
+                            "host_custom",
+                            "host_all"
+                        ]
+                    },
+                    "select_host_metrics": {
+                        "type": "string"
+                    },
+                    "select_mv": {
+                        "type": "string",
+                        "enum": [
+                            "mv_off",
+                            "mv_kpi",
+                            "mv_custom",
+                            "mv_all"
+                        ]
+                    },
+                    "select_mv_metrics": {
+                        "type": "string"
+                    },
+                    "select_initiator": {
+                        "type": "string",
+                        "enum": [
+                            "init_off",
+                            "init_kpi",
+                            "init_custom",
+                            "init_all"
+                        ]
+                    },
+                    "select_initiator_metrics": {
+                        "type": "string"
+                    },
+                    "select_rdf": {
+                        "type": "string",
+                        "enum": [
+                            "rdf_off",
+                            "rdf_kpi",
+                            "rdf_custom",
+                            "rdf_all"
+                        ]
+                    },
+                    "select_rdfs_metrics": {
+                        "type": "string"
+                    },
+                    "select_rdfa_metrics": {
+                        "type": "string"
+                    },
+                    "select_metro_dr": {
+                        "type": "string",
+                        "enum": [
+                            "metro_off",
+                            "metro_on"
+                        ]
+                    },
+                    "select_snap_policy": {
+                        "type": "string",
+                        "enum": [
+                            "sp_off",
+                            "sp_on"
+                        ]
+                    },
+                    "select_audit_logs": {
+                        "type": "string",
+                        "enum": [
+                            "audit_off",
+                            "audit_on"
+                        ]
+                    },
+                    "select_alerts": {
+                        "type": "string",
+                        "enum": [
+                            "alerts_off",
+                            "alerts_on"
+                        ]
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "BasicAuth": {
+                "type": "http",
+                "scheme": "basic"
+            }
+        }
+    },
+    "paths": {
+        "/TA_DellEMC_VMAX_settings/logging": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Get list of items for logging",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "entry": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "content": {
+                                                        "$ref": "#/components/schemas/logging_without_name"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Get list of items for logging",
+                "deprecated": false
+            },
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Create item in logging",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "entry": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "content": {
+                                                        "$ref": "#/components/schemas/logging_without_name"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Create item in logging",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/logging"
+                            }
+                        }
+                    },
+                    "required": false
+                },
+                "deprecated": false
+            },
+            "parameters": [
+                {
+                    "name": "output_mode",
+                    "in": "query",
+                    "required": true,
+                    "description": "Output mode",
+                    "schema": {
+                        "type": "string",
+                        "enum": [
+                            "json"
+                        ],
+                        "default": "json"
+                    }
+                }
+            ]
+        },
+        "/TA_DellEMC_VMAX_inputs": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Get list of items for inputs",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "entry": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "content": {
+                                                        "$ref": "#/components/schemas/inputs_without_name"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Get list of items for inputs",
+                "deprecated": false
+            },
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Create item in inputs",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "entry": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "content": {
+                                                        "$ref": "#/components/schemas/inputs_without_name"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Create item in inputs",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/inputs_without_disabled"
+                            }
+                        }
+                    },
+                    "required": false
+                },
+                "deprecated": false
+            },
+            "parameters": [
+                {
+                    "name": "output_mode",
+                    "in": "query",
+                    "required": true,
+                    "description": "Output mode",
+                    "schema": {
+                        "type": "string",
+                        "enum": [
+                            "json"
+                        ],
+                        "default": "json"
+                    }
+                }
+            ]
+        },
+        "/TA_DellEMC_VMAX_inputs/{name}": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Get inputs item details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "entry": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "content": {
+                                                        "$ref": "#/components/schemas/inputs_without_name"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Get inputs item details",
+                "deprecated": false
+            },
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Update inputs item",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "entry": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "content": {
+                                                        "$ref": "#/components/schemas/inputs_without_name"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Update inputs item",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/inputs_without_name"
+                            }
+                        }
+                    },
+                    "required": false
+                },
+                "deprecated": false
+            },
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "Delete inputs item",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "entry": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "content": {
+                                                        "$ref": "#/components/schemas/inputs_without_name"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Delete inputs item",
+                "deprecated": false
+            },
+            "parameters": [
+                {
+                    "name": "name",
+                    "in": "path",
+                    "required": true,
+                    "description": "The name of the item to operate on",
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                {
+                    "name": "output_mode",
+                    "in": "query",
+                    "required": true,
+                    "description": "Output mode",
+                    "schema": {
+                        "type": "string",
+                        "enum": [
+                            "json"
+                        ],
+                        "default": "json"
+                    }
+                }
+            ]
+        }
+    },
+    "security": [
+        {
+            "BasicAuth": []
+        }
+    ]
+}
