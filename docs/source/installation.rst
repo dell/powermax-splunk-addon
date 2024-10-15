@@ -4,9 +4,9 @@ Installation
 Supported Versions
 ------------------
 +---------------------------------+----------------------------------------+
-| **PowerMax for Splunk**         | 4.0.2                                  |
+| **PowerMax for Splunk**         | 5.0.0                                  |
 +---------------------------------+----------------------------------------+
-| **Technology Add-On**           | 4.0.2                                  |
+| **Technology Add-On**           | 5.0.0                                  |
 +---------------------------------+----------------------------------------+
 | **Minimum Unisphere Version**   | 10.0.0.0                               |
 +---------------------------------+----------------------------------------+
@@ -105,7 +105,7 @@ change this if not using the default Unisphere port.
     certificate when configuring your data inputs in Splunk. If you prefer this
     method please skip to step 3.
 
-2. OPTIONAL STEP: If you want to add the cert to the system certificate bundle
+2. Add the cert to the system certificate bundle
 so no certificate path is specified in the PowerMax data input, copy the
 .pem file to the system certificate directory as a ``.crt`` file:
 
@@ -123,12 +123,6 @@ Update CA certificate database with the following commands:
 Check that the new ``unisphere.crt`` certificate will activate by selecting
 ``ask`` in the new dialog window. If it is not enabled for activation, use the
 ``up`` and ``down`` keys to select, and the ``space`` key to enable or disable.
-
-3. If step 2 is skipped, the cert from step 1 will remain in a local
-directory on the Splunk host. You can specify the location of the ``.pem``
-cert in the TA data input setting ``SSL Cert Location``. Otherwise, leave
-``SSL Cert Location`` blank and ``Enable SSL`` enabled to use the cert from the
-system certificate bundle configured in step 2.
 
 
 Installing the TA and App

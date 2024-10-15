@@ -2,8 +2,9 @@
     "meta": {
         "name": "TA-DellEMC_VMAX",
         "displayName": "Dell EMC PowerMax Add-on for Splunk Enterprise",
-        "version": "4.0.2",
+        "version": "5.0.0",
         "restRoot": "TA_DellEMC_VMAX",
+        "_uccVersion": "5.39.0",
         "schemaVersion": "0.0.3"
     },
     "pages": {
@@ -110,14 +111,6 @@
                         "label": "Array ID"
                     },
                     {
-                        "field": "enable_ssl",
-                        "label": "Enable SSL"
-                    },
-                    {
-                        "field": "ssl_cert_location",
-                        "label": "SSL Cert Location"
-                    },
-                    {
                         "field": "rest_request_timeout",
                         "label": "REST Request Timeout"
                     },
@@ -207,7 +200,7 @@
                     },
                     {
                         "field": "select_iscsi_target_metrics",
-                        "label": "Endpoint Custom Metrics"
+                        "label": "iSCSI Target Custom Metrics"
                     },
                     {
                         "field": "select_host",
@@ -315,8 +308,8 @@
                             "defaultValue": "default",
                             "options": {
                                 "endpointUrl": "data/indexes",
-                                "createSearchChoice": true,
-                                "denyList": "^_.*$"
+                                "denyList": "^_.*$",
+                                "createSearchChoice": true
                             },
                             "required": true,
                             "validators": [
@@ -407,32 +400,6 @@
                                     "errorMsg": "Max length of text input is 8192"
                                 }
                             ]
-                        },
-                        {
-                            "field": "enable_ssl",
-                            "label": "Enable SSL",
-                            "help": "Enable SSL communication between Splunk and Unisphere",
-                            "required": false,
-                            "type": "checkbox",
-                            "defaultValue": true
-                        },
-                        {
-                            "field": "ssl_cert_location",
-                            "label": "SSL Cert Location",
-                            "help": "(Optional) Leave this blank if the Unisphere SSL certificate is loaded into the system, otherwise you can specify the direct path to the .pem certificate",
-                            "required": false,
-                            "type": "text",
-                            "validators": [
-                                {
-                                    "type": "string",
-                                    "minLength": 0,
-                                    "maxLength": 8192,
-                                    "errorMsg": "Max length of text input is 8192"
-                                }
-                            ],
-                            "options": {
-                                "placeholder": "/path/to/cert"
-                            }
                         },
                         {
                             "field": "rest_request_timeout",
@@ -822,7 +789,7 @@
                         {
                             "field": "select_iscsi",
                             "label": "iSCSI",
-                            "help": "Collect Endpoint & IP Interface level information",
+                            "help": "Collect iSCSI Target & IP Interface level information",
                             "required": false,
                             "type": "singleSelect",
                             "defaultValue": "iscsi_off",
@@ -865,8 +832,8 @@
                         },
                         {
                             "field": "select_iscsi_target_metrics",
-                            "label": "Endpoint Custom Metrics",
-                            "help": "(Optional) For custom Endpoint reporting metrics please define comma separated list of metrics here",
+                            "label": "iSCSI Target Custom Metrics",
+                            "help": "(Optional) For custom iSCSI Target reporting metrics please define comma separated list of metrics here",
                             "required": false,
                             "type": "text",
                             "validators": [

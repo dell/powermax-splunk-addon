@@ -45,7 +45,7 @@ class TestBaseTestCase(testtools.TestCase):
             password=self.helper.get_arg('u4v_password'),
             server_ip=self.helper.get_arg('u4v_ip_address'),
             port=self.helper.get_arg('u4v_port'),
-            verify=self.helper.get_arg('enable_ssl'),
+            verify=True,
             array_id=self.helper.get_arg('u4v_vmax_id'))
 
     def tearDown(self):

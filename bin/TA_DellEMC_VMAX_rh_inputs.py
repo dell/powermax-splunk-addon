@@ -1,18 +1,17 @@
-"""bin/TA_DellEMC_VMAX_rh_inputs.py"""
 
-import ta_dellemc_vmax_declare  # NOQA
+import ta_dellemc_vmax_declare
 
+from splunktaucclib.rest_handler.endpoint import (
+    field,
+    validator,
+    RestModel,
+    DataInputModel,
+)
+from splunktaucclib.rest_handler import admin_external, util
 from splunk_aoblib.rest_migration import ConfigMigrationHandler
 
-from splunktaucclib.rest_handler.endpoint import DataInputModel
-from splunktaucclib.rest_handler.endpoint import field
-from splunktaucclib.rest_handler.endpoint import RestModel
-from splunktaucclib.rest_handler.endpoint import validator
-
-from splunktaucclib.rest_handler import admin_external
-from splunktaucclib.rest_handler import util
-
 util.remove_http_proxy_env_vars()
+
 
 fields = [
     field.RestField(
@@ -21,401 +20,385 @@ fields = [
         encrypted=False,
         default=None,
         validator=validator.Pattern(
-            regex=r"""^\-[1-9]\d*$|^\d*$""",
+            regex=r"""^\-[1-9]\d*$|^\d*$""", 
         )
-    ),
+    ), 
     field.RestField(
         'index',
         required=True,
         encrypted=False,
         default='default',
         validator=validator.String(
-            min_len=1,
-            max_len=80,
+            min_len=1, 
+            max_len=80, 
         )
-    ),
+    ), 
     field.RestField(
         'u4v_ip_address',
         required=True,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'u4v_port',
         required=True,
         encrypted=False,
         default='8443',
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'u4v_username',
         required=True,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'u4v_password',
         required=True,
         encrypted=True,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'u4v_vmax_id',
         required=True,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
-    field.RestField(
-        'enable_ssl',
-        required=False,
-        encrypted=False,
-        default=True,
-        validator=None
-    ),
-    field.RestField(
-        'ssl_cert_location',
-        required=False,
-        encrypted=False,
-        default=None,
-        validator=validator.String(
-            min_len=0,
-            max_len=8192,
-        )
-    ),
+    ), 
     field.RestField(
         'rest_request_timeout',
         required=False,
         encrypted=False,
         default='60',
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_array',
         required=False,
         encrypted=False,
         default='array_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_array_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_srp',
         required=False,
         encrypted=False,
         default='srp_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_srp_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_sg',
         required=False,
         encrypted=False,
         default='sg_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_sg_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_director',
         required=False,
         encrypted=False,
         default='dir_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_fe_dir_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_be_dir_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_rdf_dir_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_im_dir_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_eds_dir_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_em_dir_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_port',
         required=False,
         encrypted=False,
         default='port_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_fe_port_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_be_port_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_rdf_port_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_pg',
         required=False,
         encrypted=False,
         default='pg_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_pg_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_iscsi',
         required=False,
         encrypted=False,
         default='iscsi_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_ip_interface_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_iscsi_target_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_host',
         required=False,
         encrypted=False,
         default='host_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_host_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_mv',
         required=False,
         encrypted=False,
         default='mv_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_mv_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_initiator',
         required=False,
         encrypted=False,
         default='init_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_initiator_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_rdf',
         required=False,
         encrypted=False,
         default='rdf_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_rdfs_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_rdfa_metrics',
         required=False,
         encrypted=False,
         default=None,
         validator=validator.String(
-            min_len=0,
-            max_len=8192,
+            min_len=0, 
+            max_len=8192, 
         )
-    ),
+    ), 
     field.RestField(
         'select_metro_dr',
         required=False,
         encrypted=False,
         default='metro_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_snap_policy',
         required=False,
         encrypted=False,
         default='sp_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_audit_logs',
         required=False,
         encrypted=False,
         default='audit_off',
         validator=None
-    ),
+    ), 
     field.RestField(
         'select_alerts',
         required=False,
         encrypted=False,
         default='alerts_off',
         validator=None
-    ),
+    ), 
+
     field.RestField(
         'disabled',
         required=False,
@@ -425,10 +408,13 @@ fields = [
 ]
 model = RestModel(fields, name=None)
 
+
+
 endpoint = DataInputModel(
     'inputs',
     model,
 )
+
 
 if __name__ == '__main__':
     admin_external.handle(
