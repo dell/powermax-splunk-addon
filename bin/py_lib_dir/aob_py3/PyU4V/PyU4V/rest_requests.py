@@ -51,7 +51,7 @@ class RestRequests(object):
     """RestRequests."""
 
     def __init__(self, username, password, verify, base_url, interval, retries,
-                 application_type=None):
+                 application_type=None, proxies=None, timeout=None):
         """__init__."""
         self.username = username
         self.password = password
@@ -61,8 +61,11 @@ class RestRequests(object):
                         ACCEPT: APP_JSON,
                         USER_AGENT: ua_details,
                         APP_TYPE: application_type}
-        self.timeout = 120
+        # if timeout is not none set self.timeout to timeout
+        # value or set to 120
+        self.timeout = timeout or 120
         self.interval = interval
+        self.proxies = proxies
         self.retries = retries
         self.session = self.establish_rest_session()
 
@@ -75,6 +78,7 @@ class RestRequests(object):
         session.headers = self.headers if not headers else headers
         session.auth = HTTPBasicAuth(self.username, self.password)
         session.verify = True
+        session.proxies = self.proxies
         return session
 
     def rest_request(self, target_url, method,
@@ -128,9 +132,17 @@ class RestRequests(object):
 
         except requests.Timeout as error:
             LOG.error(
-                'The {method} request to URL {url} timed-out, but may have '
-                'been successful. Please check the array. Exception received: '
-                '{exc}.'.format(method=method, url=url, exc=error))
+                'The {} request to URL {} timed-out, but may have '
+                'been successful. Please check Unisphere Server for any '
+                'slowness, long-running API calls are a symptom of '
+                'Unisphere Server limits being reached. {}. See '
+                'https://developer.dell.com/apis/4458/versions/10.0/docs'
+                '/Getting%20Started/4.concurrent_operations.md, To ensure '
+                'limits are not being exceeded verify the number of '
+                'connections and calls in Unisphere for PowerMax under '
+                'Support > Management Server Resources or using system '
+                'call get_management_server_resources()'
+                ''.format(method, url, error))
             return None, None
 
         except r_exc.SSLError as error:

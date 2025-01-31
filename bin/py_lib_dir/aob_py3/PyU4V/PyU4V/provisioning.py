@@ -38,6 +38,7 @@ PORT = constants.PORT
 HOST = constants.HOST
 HOSTGROUP = constants.HOSTGROUP
 INITIATOR = constants.INITIATOR
+MAINFRAME = constants.MAINFRAME
 MASKINGVIEW = constants.MASKINGVIEW
 CONNECTIONS = constants.CONNECTIONS
 PORTGROUP = constants.PORTGROUP
@@ -64,6 +65,7 @@ class ProvisioningFunctions(object):
         self.create_resource = self.common.create_resource
         self.modify_resource = self.common.modify_resource
         self.delete_resource = self.common.delete_resource
+        self.version = constants.UNISPHERE_VERSION
 
     def get_array(self, array_id=None):
         """Query for details of an array from SLOPROVISIONING endpoint.
@@ -76,120 +78,6 @@ class ProvisioningFunctions(object):
             category=SLOPROVISIONING, resource_level=SYMMETRIX,
             resource_level_id=array_id)
         return response if response else dict()
-
-    @decorators.refactoring_notice(
-        'SystemFunctions', 'get_director', 10.0, 10.2)
-    def get_director(self, director):
-        """Query for details of a director for a symmetrix.
-
-        DEPRECATION NOTICE: ProvisioningFunctions.get_director()
-        will be removed in PyU4V version 10.2 in favour of
-        SystemFunctions.get_director(). For further
-        information please consult PyU4V 10.0 release notes.
-
-        For V4 you must use SystemFunctions.get_director()
-
-        :param director: the director ID e.g. FA-1D -- str
-        :returns: director details -- dict
-        """
-        return self.get_resource(
-            category=SYSTEM,
-            resource_level=SYMMETRIX, resource_level_id=self.array_id,
-            resource_type=DIRECTOR, resource_type_id=director)
-
-    @decorators.refactoring_notice(
-        'SystemFunctions', 'get_director_list', 10.0, 10.2)
-    def get_director_list(self):
-        """Query for details of Symmetrix directors for a symmetrix.
-
-        DEPRECATION NOTICE: ProvisioningFunctions.get_director()
-        will be removed in PyU4V version 10.2 in favour of
-        SystemFunctions.get_director_list(). For further
-        information please consult PyU4V 10.0 release notes.
-
-        For V4 you must use SystemFunctions.get_director_list()
-
-        :returns: directors -- list
-        """
-        response = self.get_resource(
-            category=SYSTEM,
-            resource_level=SYMMETRIX, resource_level_id=self.array_id,
-            resource_type=DIRECTOR)
-        return response.get('directorId', list()) if response else list()
-
-    @decorators.refactoring_notice(
-        'SystemFunctions', 'get_director_port', 10.0, 10.2)
-    def get_director_port(self, director, port_no):
-        """Get details of the symmetrix director port.
-
-        DEPRECATION NOTICE: ProvisioningFunctions.get_director()
-        will be removed in PyU4V version 10.2 in favour of
-        SystemFunctions.get_director_port(). For further
-        information please consult PyU4V 10.0 release notes.
-
-        For V4 you must use SystemFunctions.get_director_port()
-
-        :param director: the director ID e.g. FA-1D -- str
-        :param port_no: the port number e.g. 1 -- str
-        :returns: director port details -- dict
-        """
-        return self.get_resource(
-            category=SYSTEM,
-            resource_level=SYMMETRIX, resource_level_id=self.array_id,
-            resource_type=DIRECTOR, resource_type_id=director,
-            resource=PORT, resource_id=port_no)
-
-    @decorators.refactoring_notice(
-        'SystemFunctions', 'get_director_port_list', 10.0, 10.2)
-    def get_director_port_list(self, director, filters=None):
-        """Get list of the ports on a particular director.
-
-        Can be filtered by optional parameters, please see documentation.
-
-        DEPRECATION NOTICE: ProvisioningFunctions.get_director()
-        will be removed in PyU4V version 10.2 in favour of
-        SystemFunctions.get_director_port_list(). For further
-        information please consult PyU4V 10.0 release notes.
-
-        For V4 you must use SystemFunctions.get_director_port_list()
-
-        :param director: the director ID e.g. FA-1D -- str
-        :param filters: optional filters - dict
-        :returns: port key dicts -- list
-        """
-        response = self.get_resource(
-            category=SYSTEM,
-            resource_level=SYMMETRIX, resource_level_id=self.array_id,
-            resource_type=DIRECTOR, resource_type_id=director,
-            resource=PORT, params=filters)
-        port_key_list = (
-            response.get('symmetrixPortKey', list()) if response else list())
-        return port_key_list
-
-    @decorators.refactoring_notice(
-        'SystemFunctions', 'get_port_identifier', 10.0, 10.2)
-    def get_port_identifier(self, director, port_no):
-        """Get the identifier (wwn) of the physical port.
-
-        DEPRECATION NOTICE: ProvisioningFunctions.get_director()
-        will be removed in PyU4V version 10.2 in favour of
-        SystemFunctions.get_port_identifier(). For further
-        information please consult PyU4V 10.0 release notes.
-
-        For V4 you must use SystemFunctions.get_port_identifier()
-
-        :param director: the id of the director -- str
-        :param port_no: the number of the port -- str
-        :returns: wwn (FC) or iqn (iscsi) -- str or None
-        """
-        wwn = None
-        port_info = self.get_director_port(director, port_no)
-        if port_info:
-            try:
-                wwn = port_info['symmetrixPort']['identifier']
-            except KeyError:
-                LOG.error('Cannot retrieve port information.')
-        return wwn
 
     def get_host(self, host_id):
         """Get details on a host on the array.
@@ -541,7 +429,7 @@ class ProvisioningFunctions(object):
     def create_masking_view_existing_components(
             self, port_group_name, masking_view_name,
             storage_group_name, host_name=None,
-            host_group_name=None, _async=False):
+            host_group_name=None, _async=False, starting_lun_address=None):
         """Create a new masking view using existing groups.
 
         Must enter either a host name or a host group name, but not both.
@@ -552,6 +440,8 @@ class ProvisioningFunctions(object):
         :param host_name: name of the host (initiator group) -- str
         :param host_group_name: name of host group -- str
         :param _async: if command should be run asynchronously -- bool
+        :param starting_lun_address: HLU address of starting lun for volumes
+                                     -- int
         :returns: masking view details -- dict
         :raises: InvalidInputException
         """
@@ -574,6 +464,9 @@ class ProvisioningFunctions(object):
                     'storageGroupId': storage_group_name}}})
         if _async:
             payload.update(ASYNC_UPDATE)
+
+        if starting_lun_address:
+            payload.update({'starting_lun_address': starting_lun_address})
 
         return self.create_resource(
             category=SLOPROVISIONING,
@@ -791,112 +684,13 @@ class ProvisioningFunctions(object):
                 port_list.append(port)
         return port_list
 
-    @decorators.refactoring_notice(
-        'SystemFunctions', 'get_target_wwns_from_port_group', 10.0, 10.2)
-    def get_target_wwns_from_port_group(self, port_group_id):
-        """Get the director ports' WWNs.
-
-        DEPRECATION NOTICE:
-        ProvisioningFunctions.get_target_wwns_from_port_group()
-        will be removed in PyU4V version 10.2 in favour of
-        SystemFunctions.get_target_wwns_from_port_group(). For further
-        information please consult PyU4V 10.0 release notes.
-
-        For V4 you must use SystemFunctions.get_target_wwns_from_port_group()
-
-        :param port_group_id: the name of the port group -- str
-        :returns: target_wwns -- target wwns for the port group -- list
-        """
-        target_wwns = list()
-        port_group_details = self.get_port_group(port_group_id)
-        dir_port_list = port_group_details['symmetrixPortKey']
-        for dir_port in dir_port_list:
-            dir_id = dir_port['directorId']
-            port_no = dir_port['portId']
-            wwn = self.get_port_identifier(dir_id, port_no)
-            target_wwns.append(wwn)
-        return target_wwns
-
-    @decorators.refactoring_notice(
-        'SystemFunctions', 'get_iscsi_ip_address_and_iqn', 10.0, 10.2)
-    def get_iscsi_ip_address_and_iqn(self, port_id):
-        """Get the ip addresses from the director port.
-
-        DEPRECATION NOTICE:
-        ProvisioningFunctions.get_iscsi_ip_address_and_iqn()
-        will be removed in PyU4V version 10.2 in favour of
-        SystemFunctions.get_iscsi_ip_address_and_iqn(). For further
-        information please consult PyU4V 10.0 release notes.
-
-        For V4 you must use SystemFunctions.get_iscsi_ip_address_and_iqn()
-
-        :param port_id: director port identifier -- str
-        :returns: ip addresses, iqn --  list, str
-        """
-        ip_addresses, iqn = list(), None
-        dir_id = port_id.split(':')[0]
-        port_no = port_id.split(':')[1]
-        port_details = self.get_director_port(dir_id, port_no)
-        if port_details:
-            try:
-                ip_addresses = port_details['symmetrixPort']['ip_addresses']
-                iqn = port_details['symmetrixPort']['identifier']
-            except (KeyError, TypeError):
-                LOG.info('Could not get IP address from director port')
-        return ip_addresses, iqn
-
-    @decorators.refactoring_notice(
-        'ProvisioningFunctions', 'create_new_port_group', 10.0, 10.2)
-    def create_port_group(self, port_group_id, director_id, port_id,
-                          port_group_protocol=None):
-        """Create a new port group.
-
-        DEPRECATION NOTICE: ProvisioningFunctions.create_port_group()
-        will be removed in PyU4V version 10.2 in favour of
-        ProvisioningFunctions.create_new_port_group(). For further
-        information please consult PyU4V 10.0 release notes.
-
-        :param port_group_id: name of the new port group - str
-        :param director_id: director id -- str
-        :param port_id: port id -- str
-        :param port_group_protocol: required for V4 only.
-                                    one of [SCSI_FC, iSCSI, NVMe_TCP] -- str
-
-        :returns: new port group details -- dict
-        """
-        dir_port_list = [{'directorId': director_id,
-                          'portId': port_id}]
-        return self.create_new_port_group(
-            port_group_id, dir_port_list, port_group_protocol)
-
-    @decorators.refactoring_notice(
-        'ProvisioningFunctions', 'create_new_port_group', 10.0, 10.2)
-    def create_multiport_port_group(self, port_group_id, ports,
-                                    port_group_protocol=None):
-        """Create a new port group.
-
-        DEPRECATION NOTICE:
-        ProvisioningFunctions.create_multiport_port_group()
-        will be removed in PyU4V version 10.2 in favour of
-        ProvisioningFunctions.create_new_port_group(). For further
-        information please consult PyU4V 10.0 release notes.
-
-        :param port_group_id: name of the new port group -- str
-        :param ports: port dicts Example:
-                      [{'directorId': director_id, 'portId': port_id}] -- list
-        :param port_group_protocol: required for V4 only.
-                                    one of [SCSI_FC, iSCSI, NVMe_TCP] -- str
-        :returns: new port group details -- dict
-        """
-        return self.create_new_port_group(
-            port_group_id, ports, port_group_protocol)
-
     def create_empty_port_group(
             self, port_group_id, port_group_protocol=None, _async=None):
         """Create an empty port group.
+
         :param port_group_id: name of the new port group -- str
-        :param port_group_protocol: required for V4 only.
-                                    one of [SCSI_FC, iSCSI, NVMe_TCP]
+        :param port_group_protocol: required for V4 only one of [SCSI_FC, iSCSI
+                                    , NVMe_TCP] -- str
         :param _async: if call should be async -- bool
         :returns: new port group details -- dict
         """
@@ -1352,7 +1146,8 @@ class ProvisioningFunctions(object):
     def add_existing_volume_to_storage_group(
             self, storage_group_id, vol_ids, _async=False,
             remote_array_1_id=None, remote_array_1_sgs=None,
-            remote_array_2_id=None, remote_array_2_sgs=None):
+            remote_array_2_id=None, remote_array_2_sgs=None,
+            starting_lun_address=None):
         """Expand an existing storage group by adding existing volumes.
 
         :param storage_group_id: storage group id -- str
@@ -1370,6 +1165,8 @@ class ProvisioningFunctions(object):
                                   R1 - R21 - R2 optional -- str
         :param remote_array_2_sgs: storage groups on remote array, optional
                                    -- str or list
+        :param starting_lun_address: HLU address of starting lun for volumes
+                                     -- int
         :returns: storage group details -- dict
         """
         if not isinstance(vol_ids, list):
@@ -1380,6 +1177,8 @@ class ProvisioningFunctions(object):
                     'volumeId': vol_ids}}}}
         if _async:
             add_vol_data.update(ASYNC_UPDATE)
+        if starting_lun_address:
+            add_vol_data.update({'starting_lun_address': starting_lun_address})
         if remote_array_1_id and remote_array_1_sgs:
             if not isinstance(remote_array_1_sgs, list):
                 remote_array_1_sgs = [remote_array_1_sgs]
@@ -1407,7 +1206,7 @@ class ProvisioningFunctions(object):
             remote_array_1_id=None, remote_array_1_sgs=None,
             remote_array_2_id=None, remote_array_2_sgs=None,
             enable_mobility_id=False, emulation_type='FBA',
-            append_vol_id=False):
+            append_vol_id=False, starting_lun_address=None):
         """Expand an existing storage group by adding new volumes.
 
         :param storage_group_id: storage group id -- str
@@ -1434,12 +1233,17 @@ class ProvisioningFunctions(object):
         :param emulation_type: device emulation type (CKD, FBA) -- str
         :param append_vol_id: append volume id to the volume name,
                               optional -- bool
+        :param starting_lun_address: HLU address of starting lun for volumes
+                                     -- int
         :returns: storage group details -- dict
         """
         add_volume_param = {'emulation': emulation_type}
 
         if not create_new_volumes:
             add_volume_param.update({'create_new_volumes': False})
+        if starting_lun_address:
+            add_volume_param.update(
+                {'starting_lun_address': starting_lun_address})
 
         volume_attributes = ({
             'num_of_vols': num_vols,
@@ -1483,7 +1287,8 @@ class ProvisioningFunctions(object):
     def remove_volume_from_storage_group(
             self, storage_group_id, vol_id, _async=False,
             remote_array_1_id=None, remote_array_1_sgs=None,
-            remote_array_2_id=None, remote_array_2_sgs=None):
+            remote_array_2_id=None, remote_array_2_sgs=None,
+            terminate_snapshots=False):
         """Remove a volume from a given storage group.
 
         :param storage_group_id: storage group id -- str
@@ -1500,6 +1305,8 @@ class ProvisioningFunctions(object):
                -- str
         :param remote_array_2_sgs: storage groups on remote array, optional
                -- str or list
+        :param terminate_snapshots: terminate any snapshots on volume when
+                                    removing from storage group -- bool
         :returns: storage group details -- dict
         """
         if not isinstance(vol_id, list):
@@ -1530,6 +1337,9 @@ class ProvisioningFunctions(object):
                             'remote_symmetrix_2_sgs': remote_array_2_sgs}}}})
         if _async:
             payload.update(ASYNC_UPDATE)
+        if terminate_snapshots:
+            payload['editStorageGroupActionParam']['removeVolumeParam'][
+                'terminate_snapshots'] = terminate_snapshots
         return self.modify_storage_group(storage_group_id, payload)
 
     def move_volumes_between_storage_groups(
@@ -1889,8 +1699,18 @@ class ProvisioningFunctions(object):
     def _modify_volume(self, device_id, payload):
         """Modify a volume.
 
+        Additional Payloads can be provided, check out documentation at
+        https://dell.to/3HpzlJv for all supported volume operations.
+
         :param device_id: device id -- str
-        :param payload: request payload -- dict
+        :param payload: request payload e.g. {"editVolumeActionParam": {
+                        "enable_mobility_id_param": {
+                            "enable_mobility_id": "true"}}}
+                              or
+                              {
+                        "editVolumeActionParam": {
+                          "reset_wwn_param": {
+                            "reset_wwn": "true"}}} -- dict
         :returns: volume details -- dict
         """
         return self.modify_resource(
@@ -1945,6 +1765,29 @@ class ProvisioningFunctions(object):
             'modifyVolumeIdentifierParam': {
                 'volumeIdentifier': vol_identifier_dict}}})
         return self._modify_volume(device_id, rename_vol_payload)
+
+    def reset_volume_wwn(self, device_id, array_id=None):
+        """reset volume wwn to remove external identify set by non
+        disruptive migration.
+
+        :param device_id: 5 digit device id -- int
+        :param array_id: 16 digit array id -- int
+
+        """
+        array_id = array_id if array_id else self.array_id
+        payload = {
+            "editVolumeActionParam": {
+                "reset_wwn_param": {
+                    "reset_wwn": "true"
+                }}}
+        try:
+            return self.common.modify_resource(
+                target_uri=f"/{self.version}/sloprovisioning/"
+                           f"symmetrix/{array_id}/volume/{device_id}",
+                resource_type=None, payload=payload)
+        except Exception as e:
+            error_message = f"Failed to reset volume WWN: {str(e)}"
+            raise Exception(error_message)
 
     def deallocate_volume(self, device_id):
         """Deallocate all tracks on a volume.
@@ -2072,25 +1915,6 @@ class ProvisioningFunctions(object):
                 break
         return selected_masking_view, active_connections
 
-    @decorators.refactoring_notice(
-        'SystemFunctions', 'get_fa_directors', 10.0, 10.2)
-    def get_fa_directors(self):
-        """Get all FA directors on the array.
-
-        DEPRECATION NOTICE: ProvisioningFunctions.get_fa_directors()
-        will be removed in PyU4V version 10.2 in favour of
-        SystemFunctions.get_fa_directors(). For further
-        information please consult PyU4V 10.0 release notes.
-
-        :returns: fa director strings  -- list
-        """
-        directors = self.get_director_list()
-        fa_directors = set()
-        for director in directors:
-            if 'FA-' in director:
-                fa_directors.add(director)
-        return list(fa_directors)
-
     def get_available_initiator_list(self, director_type=None):
         """Get list of available initiators.
 
@@ -2193,7 +2017,7 @@ class ProvisioningFunctions(object):
         :returns: split ids -- list
         """
         split_id_list = list()
-        response = self.common.get_resource(category=SLOPROVISIONING,
+        response = self.common.get_resource(category=MAINFRAME,
                                             resource_level=SYMMETRIX,
                                             resource_level_id=self.array_id,
                                             resource_type=FICON_SPLIT)
@@ -2206,7 +2030,7 @@ class ProvisioningFunctions(object):
         :param split_id: split id -- str
         :returns: split details -- dict
         """
-        return self.common.get_resource(category=SLOPROVISIONING,
+        return self.common.get_resource(category=MAINFRAME,
                                         resource_level=SYMMETRIX,
                                         resource_level_id=self.array_id,
                                         resource_type=FICON_SPLIT,
@@ -2218,7 +2042,7 @@ class ProvisioningFunctions(object):
         :returns: CU Image ssids -- list
         """
         cu_image_ssid_list = list()
-        response = self.common.get_resource(category=SLOPROVISIONING,
+        response = self.common.get_resource(category=MAINFRAME,
                                             resource_level=SYMMETRIX,
                                             resource_level_id=self.array_id,
                                             resource_type=FICON_SPLIT,
@@ -2234,7 +2058,7 @@ class ProvisioningFunctions(object):
         :param cu_ssid: cu image ssid -- str
         :returns: CU Image details -- dict
         """
-        return self.common.get_resource(category=SLOPROVISIONING,
+        return self.common.get_resource(category=MAINFRAME,
                                         resource_level=SYMMETRIX,
                                         resource_level_id=self.array_id,
                                         resource_type=FICON_SPLIT,
@@ -2258,12 +2082,11 @@ class ProvisioningFunctions(object):
                        "startBaseAddress": cu_base_address,
                        "volumeId": [vol_id]
                        }
-        # FIXME This call takes over 5 minutes on my powermax 8000 -
-        # so need to force async call
+
         new_cu_data.update(ASYNC_UPDATE)
 
         create_cu_async_job = (
-            self.common.create_resource(category=SLOPROVISIONING,
+            self.common.create_resource(category=MAINFRAME,
                                         resource_level=SYMMETRIX,
                                         resource_level_id=self.array_id,
                                         resource_type=FICON_SPLIT,
@@ -2282,7 +2105,7 @@ class ProvisioningFunctions(object):
         :returns: Volume ids -- list
         """
         volume_id_list = list()
-        response = self.common.get_resource(category=SLOPROVISIONING,
+        response = self.common.get_resource(category=MAINFRAME,
                                             resource_level=SYMMETRIX,
                                             resource_level_id=self.array_id,
                                             resource_type=FICON_SPLIT,
@@ -2301,7 +2124,7 @@ class ProvisioningFunctions(object):
         :pamam vol_id volume device id to be mapped to the cu -- str
         :returns: volume details -- dict
         """
-        return self.common.get_resource(category=SLOPROVISIONING,
+        return self.common.get_resource(category=MAINFRAME,
                                         resource_level=SYMMETRIX,
                                         resource_level_id=self.array_id,
                                         resource_type=FICON_SPLIT,
@@ -2365,12 +2188,10 @@ class ProvisioningFunctions(object):
                    'remove_alias_dict, map_volume_list, or unmap_volume_list.')
             raise exception.InvalidInputException(data=msg)
 
-        # FIXME This call takes over 5 minutes on my powermax 8000
-        #  - so need to force async call
         edit_cu_data.update(ASYNC_UPDATE)
 
         edit_cu_async_job = (
-            self.common.modify_resource(category=SLOPROVISIONING,
+            self.common.modify_resource(category=MAINFRAME,
                                         resource_level=SYMMETRIX,
                                         resource_level_id=self.array_id,
                                         resource_type=FICON_SPLIT,

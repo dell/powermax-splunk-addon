@@ -2,7 +2,7 @@
     "meta": {
         "name": "TA-DellEMC_VMAX",
         "displayName": "Dell EMC PowerMax Add-on for Splunk Enterprise",
-        "version": "5.0.0",
+        "version": "6.0.0",
         "restRoot": "TA_DellEMC_VMAX",
         "_uccVersion": "5.39.0",
         "schemaVersion": "0.0.3"

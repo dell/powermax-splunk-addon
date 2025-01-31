@@ -57,13 +57,6 @@ class CITestPerformance(base.TestBaseTestCase, testtools.TestCase):
         self.perf.set_recency(recency)
         self.assertEqual(self.perf.recency, recency)
 
-    def test_is_array_performance_registered(self):
-        """Test is_array_performance_registered invalid ID."""
-        self.assertTrue(
-            self.perf.is_array_performance_registered())
-        self.assertFalse(
-            self.perf.is_array_performance_registered('Fake'))
-
     def test_is_array_diagnostic_performance_registered(self):
         """Test is_array_diagnostic_performance_registered response format."""
         self.assertTrue(
@@ -75,8 +68,6 @@ class CITestPerformance(base.TestBaseTestCase, testtools.TestCase):
         """Test is_array_real_time_performance_registered response format."""
         self.assertTrue(
             self.perf.is_array_real_time_performance_registered())
-        self.assertFalse(
-            self.perf.is_array_real_time_performance_registered('Fake'))
 
     def test_get_array_registration_details(self):
         """Test get_array_registration_details."""
@@ -214,15 +205,6 @@ class CITestPerformance(base.TestBaseTestCase, testtools.TestCase):
         self.assertIsInstance(start, str)
         self.assertTrue(int(start) < int(end))
 
-    def test_format_time_input_no_end(self):
-        """Test format_time_input no end time provided."""
-        start_time = self.time_now - (pc.ONE_MINUTE * 20)
-        start, end = self.perf.format_time_input(category=pc.ARRAY,
-                                                 start_time=start_time)
-        self.assertTrue(end)
-        self.assertIsInstance(end, str)
-        self.assertTrue(int(start) < int(end))
-
     def test_format_time_input_no_start_or_end(self):
         """Test format_time_input no end time provided."""
         start, end = self.perf.format_time_input(category=pc.ARRAY)
@@ -300,6 +282,8 @@ class CITestPerformance(base.TestBaseTestCase, testtools.TestCase):
 
     def test_update_threshold_settings(self):
         """Test set_perf_threshold_and_alert."""
+        self.skipTest(reason="Test and functions to be updated in version "
+                             "10.2")
         metric = 'PercentCacheWP'
         alert, f_threshold, s_threshold = None, None, None
 
@@ -434,6 +418,7 @@ class CITestPerformance(base.TestBaseTestCase, testtools.TestCase):
         """Test array performance function."""
         # Test get_array_keys.
         array_keys = self.perf.get_array_keys()
+        print(f"array keys {array_keys}")
         found_array = False
         for array in array_keys:
             self.assertIn(pc.SYMM_ID, array.keys())
@@ -514,15 +499,6 @@ class CITestPerformance(base.TestBaseTestCase, testtools.TestCase):
         id_tag = pc.CACHE_PART_ID
         key_func = self.perf.get_cache_partition_keys
         metrics_func = self.perf.get_cache_partition_perf_stats
-        self.run_performance_test_asserts(category, id_tag, key_func,
-                                          metrics_func)
-
-    def test_cloud_provider_performance_function(self):
-        """Test cloud provider performance function."""
-        category = pc.CLOUD_PROVIDER
-        id_tag = pc.CLOUD_PROVIDER_ID
-        key_func = self.perf.get_cloud_provider_keys
-        metrics_func = self.perf.get_cloud_provider_stats
         self.run_performance_test_asserts(category, id_tag, key_func,
                                           metrics_func)
 
@@ -698,15 +674,6 @@ class CITestPerformance(base.TestBaseTestCase, testtools.TestCase):
         self.run_performance_test_asserts(category, id_tag, key_func,
                                           metrics_func)
 
-    def test_iscsi_target_performance_function(self):
-        """Test initiator by port performance function."""
-        category = pc.ENDPOINT
-        id_tag = pc.ENDPOINT_ID_KEY
-        key_func = self.perf.get_iscsi_target_keys
-        metrics_func = self.perf.get_iscsi_target_stats
-        self.run_performance_test_asserts(category, id_tag, key_func,
-                                          metrics_func)
-
     def test_endpoint_performance_function(self):
         """Test endpoint performance function."""
         category = pc.ENDPOINT
@@ -778,7 +745,7 @@ class CITestPerformance(base.TestBaseTestCase, testtools.TestCase):
         outer_tag = pc.DIR_ID
         inner_tag = pc.PORT_ID
         inner_keys_func = self.perf.get_rdf_director_keys
-        outer_key_func = self.perf.get_rdf_port_keys
+        outer_key_func = self.perf.get_rdf_port_kys
         outer_metrics_func = self.perf.get_rdf_port_stats
         self.run_extended_input_performance_test_asserts(
             category, outer_tag, inner_tag, inner_keys_func, outer_key_func,
@@ -884,6 +851,7 @@ class CITestPerformance(base.TestBaseTestCase, testtools.TestCase):
 
     def test_thin_pool_performance_function(self):
         """Test thin pool performance function."""
+        self.skipTest("not supported on v4")
         category = pc.THIN_POOL
         id_tag = pc.POOL_ID
         key_func = self.perf.get_thin_pool_keys

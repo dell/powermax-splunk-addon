@@ -42,6 +42,8 @@ class TestBaseTestCase(testtools.TestCase):
         self.metro_dr = self.conn.metro_dr
         self.migration = self.conn.migration
         self.perf = self.conn.performance
+        self.clone = self.conn.clone
+        self.system = self.conn.system
 
     def setup_credentials(self):
         """Set REST credentials."""
@@ -146,11 +148,13 @@ class TestBaseTestCase(testtools.TestCase):
         if 'Restored' in snap_details.get('state'):
             try:
                 self.replication.delete_storage_group_snapshot_by_snap_id(
-                    sg_name, snap_name, snap_id)
+                    storage_group_id=sg_name, snap_name=snap_name,
+                    snap_id=snap_id, force=True)
             except Exception:
                 pass
         self.replication.delete_storage_group_snapshot_by_snap_id(
-            sg_name, snap_name, snap_id)
+            storage_group_id=sg_name, snap_name=snap_name,
+            snap_id=snap_id, force=True)
 
     def create_rdf_sg(self):
         """set up and tear down srdf pairings.
@@ -898,6 +902,26 @@ class TestBaseTestCase(testtools.TestCase):
         #         self.metro_dr.get_metrodr_environment_details(
         #             environment_name=environment_name))
 
+    def create_clone(self):
+        storage_group_name = self.generate_name('sg')
+        target_storage_group_name = storage_group_name + "_tgt"
+        self.provision.create_non_empty_storage_group(
+            storage_group_id=storage_group_name, service_level='Diamond',
+            num_vols=1, vol_size=1, cap_unit='GB', srp_id='SRP_1',
+            workload=None)
+        self.clone.create_clone(
+            storage_group_id=storage_group_name,
+            target_storage_group_id=target_storage_group_name)
+        self.addCleanup(self.cleanup_clone, storage_group_name,
+                        target_storage_group_name)
+        return storage_group_name, target_storage_group_name
+
+    def cleanup_clone(self, storage_group_name, target_storage_group_name):
+        self.clone.terminate_clone(
+            storage_group_name, target_storage_group_name)
+        self.provision.delete_storage_group(storage_group_name)
+        self.provision.delete_storage_group(target_storage_group_name)
+
     @staticmethod
     def cleanup_pyu4v_zip_files_in_directory(directory):
         """Cleanup PyU4V zip archives in a given directory.
@@ -909,3 +933,11 @@ class TestBaseTestCase(testtools.TestCase):
         files = [x for x in p if x.is_file()]
         for file in files:
             file.unlink()
+
+    def cleanup_snmp_config(self):
+        snmp_ids = self.system.get_snmp_trap_configuration()
+        for id in snmp_ids['snmp_traps']:
+            try:
+                self.system.delete_snmp_trap_destination(snmp_id=id['id'])
+            except exception.ResourceNotFoundException:
+                pass

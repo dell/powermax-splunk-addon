@@ -1,3 +1,7 @@
+PowerMax for Splunk 6.0.0 - January 2025
+============================================
+- Update PyU4V library to latest version
+
 PowerMax for Splunk 5.0.0 - October 2024
 ============================================
 - Disable SSL Configuration and set as always on
