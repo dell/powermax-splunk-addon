@@ -20,13 +20,13 @@ sys.path.insert(0, os.path.abspath('../..'))
 # -- Project information -----------------------------------------------------
 
 project = 'PowerMax for Splunk'
-copyright = '2024 Dell Inc. or its subsidiaries.'
+copyright = '2025 Dell Inc. or its subsidiaries.'
 author = 'Dell'
 
 # The short X.Y version.
-version = u'5.0'
+version = u'6.0'
 # The full version, including alpha/beta/rc tags
-release = '5.0.0.0'
+release = '6.0.0.0'
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:

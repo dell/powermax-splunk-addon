@@ -18,6 +18,7 @@ import sys
 import time
 
 from PyU4V.common import CommonFunctions
+from PyU4V.clone import CloneFunctions
 from PyU4V.metro_dr import MetroDRFunctions
 from PyU4V.migration import MigrationFunctions
 from PyU4V.performance import PerformanceFunctions
@@ -25,11 +26,15 @@ from PyU4V.provisioning import ProvisioningFunctions
 from PyU4V.replication import ReplicationFunctions
 from PyU4V.rest_requests import RestRequests
 from PyU4V.snapshot_policy import SnapshotPolicyFunctions
+from PyU4V.serviceability import ServiceabilityFunctions
 from PyU4V.system import SystemFunctions
 from PyU4V.utils import config_handler
 from PyU4V.utils import constants
 from PyU4V.utils import exception
 from PyU4V.workload_planner import WLPFunctions
+from PyU4V.volumes import VolumesFunctions
+from PyU4V.storage_groups import StorageGroupsFunctions
+from PyU4V.performance_enhanced import EnhancedPerformanceFunctions
 
 
 file_path = None
@@ -56,12 +61,13 @@ class U4VConn(object):
                  u4v_version=constants.UNISPHERE_VERSION,
                  interval=5, retries=200, array_id=None,
                  application_type=app_type, remote_array=None,
-                 remote_array_2=None):
+                 remote_array_2=None, proxies=None, timeout=None):
         """__init__."""
         config = config_handler.set_logger_and_config(file_path)
         self.end_date = int(round(time.time() * 1000))
         self.start_date = (self.end_date - 3600000)
         self.array_id = array_id
+        self.timeout = timeout if timeout is not None else 120
         # Set array ID
         if not self.array_id:
             try:
@@ -91,6 +97,8 @@ class U4VConn(object):
                     self.remote_array_2 = config.get(SETUP, R_ARRAY_2)
             else:
                 self.remote_array_2 = None
+            if config.has_option(SETUP, 'timeout') and timeout is None:
+                self.timeout = int(config.get(SETUP, 'timeout'))
 
         # Set verification
         if verify is None:
@@ -105,14 +113,18 @@ class U4VConn(object):
         if None in [username, password, server_ip, port]:
             raise exception.MissingConfigurationException
         # Initialise REST session
-        base_url = 'https://{server_ip}:{port}/univmax/restapi'.format(
-            server_ip=server_ip, port=port)
-
+        base_url = f'https://{server_ip}:{port}/univmax/restapi'
+        enhanced_api_url = f'https://{server_ip}:{port}/univmax/rest'
         self.rest_client = RestRequests(
             username, password, verify, base_url, interval, retries,
-            application_type)
+            application_type, proxies=proxies, timeout=self.timeout)
+        self.enhanced_rest_client = RestRequests(
+            username, password, verify, enhanced_api_url, interval, retries,
+            application_type, proxies=proxies, timeout=self.timeout)
         self.request = self.rest_client.rest_request
         self.common = CommonFunctions(self.rest_client)
+        self.validate_unisphere()
+        self.clone = CloneFunctions(self.array_id, self.rest_client)
         self.provisioning = ProvisioningFunctions(self.array_id,
                                                   self.rest_client)
         self.performance = PerformanceFunctions(self.array_id,
@@ -127,7 +139,14 @@ class U4VConn(object):
         self.snapshot_policy = SnapshotPolicyFunctions(self.array_id,
                                                        self.rest_client)
         self.system = SystemFunctions(self.array_id, self.rest_client)
-        self.validate_unisphere()
+        self.serviceability = ServiceabilityFunctions(
+            self.array_id, self.rest_client)
+        self.performance_enhanced = EnhancedPerformanceFunctions(
+            self.array_id, self.enhanced_rest_client)
+        self.volumes = VolumesFunctions(
+            self.array_id, self.enhanced_rest_client)
+        self.storage_groups = StorageGroupsFunctions(
+            self.array_id, self.enhanced_rest_client)
 
     def close_session(self):
         """Close the current rest session."""
@@ -152,6 +171,12 @@ class U4VConn(object):
         self.migration.array_id = array_id
         self.wlp.array_id = array_id
         self.system.array_id = array_id
+        self.storage_groups.array_id = array_id
+        self.performance_enhanced.array_id = array_id
+        self.snapshot_policy.array_id = array_id
+        self.volumes.array_id = array_id
+        self.clone.array_id = array_id
+        self.serviceability.array_id = array_id
 
     def validate_unisphere(self):
         """Check that the minimum version of Unisphere is in-use.
@@ -164,7 +189,7 @@ class U4VConn(object):
         uni_ver, major_ver = self.common.get_uni_version()
         if int(major_ver) < int(constants.UNISPHERE_VERSION):
             msg = ('Unisphere version {uv} does not meet the minimum '
-                   'requirement of v9.2.0.x Please upgrade your version of '
+                   'requirement of v10.1.x Please upgrade your version of '
                    'Unisphere to use this SDK. Exiting...'.format(uv=uni_ver))
             sys.exit(msg)
         else:

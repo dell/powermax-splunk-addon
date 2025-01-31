@@ -1,5 +1,5 @@
-Welcome to PowerMax for Splunk 5.0!
-===================================
+Welcome to PowerMax for Splunk
+==============================
 
 | |Maintenance| |OpenSource| |AskUs| |Test| |Build| |Docs|
 | |Language| |PyVersions| |Unisphere| |Platform| |License|
@@ -31,11 +31,11 @@ The TA and App can be downloaded from the links below:
 Version Info
 ------------
 +---------------------------------+----------------------------------------+
-| **PowerMax for Splunk**         | 5.0                                    |
+| **PowerMax for Splunk**         | 6.0                                    |
 +---------------------------------+----------------------------------------+
-| **Technology Add-On**           | 5.0.0                                 |
+| **Technology Add-On**           | 6.0.0                                 |
 +---------------------------------+----------------------------------------+
-| **Minimum Unisphere Version**   | 10.0.0.0                               |
+| **Minimum Unisphere Version**   | 10.2.0.0                               |
 +---------------------------------+----------------------------------------+
 | **Array Model**                 | VMAX-3, VMAX AFA, PowerMax, V4         |
 +---------------------------------+----------------------------------------+

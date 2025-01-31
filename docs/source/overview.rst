@@ -31,9 +31,9 @@ for both code can be viewed and downloaded from the links below:
 - `Dell EMC PowerMax App for Splunk Enterprise source`_
 
 
-What's New in PowerMax for Splunk 5.0.0
+What's New in PowerMax for Splunk
 ---------------------------------------
-- Disable SSL Configuration and set as always on
+- Update PyU4V to latest version
 
 Contact
 -------
