@@ -27,6 +27,7 @@ from PyU4V.replication import ReplicationFunctions
 from PyU4V.rest_requests import RestRequests
 from PyU4V.snapshot_policy import SnapshotPolicyFunctions
 from PyU4V.serviceability import ServiceabilityFunctions
+from PyU4V.settings import SettingsFunctions
 from PyU4V.system import SystemFunctions
 from PyU4V.utils import config_handler
 from PyU4V.utils import constants
@@ -35,7 +36,8 @@ from PyU4V.workload_planner import WLPFunctions
 from PyU4V.volumes import VolumesFunctions
 from PyU4V.storage_groups import StorageGroupsFunctions
 from PyU4V.performance_enhanced import EnhancedPerformanceFunctions
-
+from PyU4V.enhanced_api import EnhancedAPIFunctions
+from PyU4V.version import MAJOR_VERSION, API_VERSION
 
 file_path = None
 app_type = 'PyU4V-{v}'.format(v=constants.PYU4V_VERSION)
@@ -51,6 +53,7 @@ PASSWORD = constants.PASSWORD
 SERVER_IP = constants.SERVER_IP
 PORT = constants.PORT
 VERIFY = constants.VERIFY
+MAJOR_VERSION = MAJOR_VERSION
 
 
 class U4VConn(object):
@@ -147,6 +150,9 @@ class U4VConn(object):
             self.array_id, self.enhanced_rest_client)
         self.storage_groups = StorageGroupsFunctions(
             self.array_id, self.enhanced_rest_client)
+        self.enhanced_api = EnhancedAPIFunctions(
+            self.array_id, self.enhanced_rest_client)
+        self.settings = SettingsFunctions(self.array_id, self.rest_client)
 
     def close_session(self):
         """Close the current rest session."""
@@ -187,10 +193,10 @@ class U4VConn(object):
         :raises: SystemExit
         """
         uni_ver, major_ver = self.common.get_uni_version()
-        if int(major_ver) < int(constants.UNISPHERE_VERSION):
-            msg = ('Unisphere version {uv} does not meet the minimum '
-                   'requirement of v10.1.x Please upgrade your version of '
-                   'Unisphere to use this SDK. Exiting...'.format(uv=uni_ver))
+        if int(major_ver) < int(API_VERSION):
+            msg = (f'Unisphere version {uni_ver} does not meet the minimum '
+                   f'requirement of v{MAJOR_VERSION} Please upgrade your '
+                   f'version of Unisphere to use this SDK. Exiting...')
             sys.exit(msg)
         else:
             LOG.debug('Unisphere version {uv} passes minimum requirement '
