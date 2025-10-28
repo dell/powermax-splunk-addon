@@ -112,14 +112,12 @@ class MetroDRFunctions(object):
         :param dr_storage_group_name: Name for Storage Group at DR,
                                       only used if group naming is required
                                       to be different from source - str
-        :param force_new_metro_r1_dr_rdfg: whether or not to create a new RDFG
-                                           to be created for Metro R1 array
-                                           to DR array, or will autoselect
-                                           from existing -- bool
-        :param force_new_metro_r2_dr_rdfg: whether or not to create a new RDFG
-                                           to be created for Metro R2 array
-                                           to DR array, or will autoselect
-                                           from existing -- bool
+        :param force_new_metro_r1_dr_rdfg: this parameter is ignored and
+                                           only present for backward
+                                           compatibility-- bool
+        :param force_new_metro_r2_dr_rdfg: this parameter is ignored and
+                                           only present for backward
+                                           compatibility-- bool
         :param _async: if call should be executed asynchronously or
                        synchronously  -- bool
         :returns: details of newly created metro dr environment-- dict
@@ -128,6 +126,11 @@ class MetroDRFunctions(object):
             dr_storage_group_name = storage_group_name
         if not metro_r2_storage_group_name:
             metro_r2_storage_group_name = storage_group_name
+        if force_new_metro_r1_dr_rdfg or force_new_metro_r2_dr_rdfg:
+            LOG.warning(
+                "Parameter 'force_new__group' is no longer "
+                "supported and will be ignored. Default behavior is to "
+                "do this automatically")
 
         if dr_replication_mode:
             if 'ASYNCHRONOUS' in dr_replication_mode.upper():
@@ -149,8 +152,6 @@ class MetroDRFunctions(object):
                 'metro_r2_array_id': metro_r2_array_id,
                 'metro_r2_storage_group_name': metro_r2_storage_group_name,
                 'dr_array_id': dr_array_id,
-                'force_new_metro_r1_dr_rdfg': force_new_metro_r1_dr_rdfg,
-                'force_new_metro_r2_dr_rdfg': force_new_metro_r2_dr_rdfg,
                 'dr_replication_mode': dr_replication_mode,
                 'dr_storage_group_name': dr_storage_group_name,
                 'metro_establish': True,
@@ -166,7 +167,7 @@ class MetroDRFunctions(object):
 
     def convert_to_metrodr_environment(
             self, storage_group_name, environment_name,
-            metro_r1_array_id=None, _async=True):
+            metro_r1_array_id=None, metro_r2_dr_rdfg=None, _async=True):
         """Converts existing R2--Async--R11--Metro--R2 to Metro DR Environment.
 
         Automatically adds recovery RDFG between Metro R2 and Async R2.
@@ -174,9 +175,12 @@ class MetroDRFunctions(object):
         :param storage_group_name: storage group name containing source
                                    devices -- str
         :param environment_name: name of Metro Dr Environment up to 16
-                                 characters-- str
+                                 characters -- str
         :param metro_r1_array_id: 12 Digit Serial Number of R1 Array for
                                   SRDF Metro Source Array, optional -- int
+        :param metro_r2_dr_rdfg: DR SRDF group that should be used to pair
+                                 Metro R2 volumes with DR volumes,
+                                 optional -- int
         :param _async: if call should be executed asynchronously or
                        synchronously  -- bool
         :returns: details of newly created metro dr environment -- dict
@@ -190,6 +194,9 @@ class MetroDRFunctions(object):
             'convert_to_metrodr_param': {
                 'storage_group_name': storage_group_name,
                 'environment_name': environment_name}}
+        if metro_r2_dr_rdfg:
+            payload['convert_to_metrodr_param'][
+                'metro_r2_dr_rdfg'] = metro_r2_dr_rdfg
         if _async:
             payload.update(ASYNC_UPDATE)
 

@@ -511,11 +511,7 @@ class PMaxSplunk:
                 'array_system_message': 'No Array system data available'}
 
         # 3. Get array WLP info
-        array_wlp = self.conn.wlp.get_capabilities(self.array_id)
-        if array_wlp:
-            array_wlp = array_wlp[0]
-        else:
-            array_wlp = {
+        array_wlp = {
                 'array_wlp_details': False,
                 'array_wlp_message': 'No Array WLP data available'}
 

@@ -1,3 +1,8 @@
+PowerMax for Splunk 7.0  - October 2025
+============================================
+- Update PyU4V library to 10.3
+- Update Splunk Add-on Builder to 4.5.1
+
 PowerMax for Splunk 6.0.0 - January 2025
 ============================================
 - Update PyU4V library to latest version

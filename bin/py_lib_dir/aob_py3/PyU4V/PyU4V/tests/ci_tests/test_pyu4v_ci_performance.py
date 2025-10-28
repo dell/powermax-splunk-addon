@@ -356,8 +356,8 @@ class CITestPerformance(base.TestBaseTestCase, testtools.TestCase):
             if metric == metric_set:
                 orig_values = (csv_data.get(pc.FIRST_THRESH)[i],
                                csv_data.get(pc.SEC_THRESH)[i])
-                updated_values = (int(orig_values[0]) + 5,
-                                  int(orig_values[1]) + 10)
+                updated_values = ((orig_values[0]) + 5,
+                                  (orig_values[1]) + 10)
                 csv_data[pc.FIRST_THRESH][i] = updated_values[0]
                 csv_data[pc.SEC_THRESH][i] = updated_values[1]
                 csv_data[pc.KPI][i] = True
@@ -418,7 +418,6 @@ class CITestPerformance(base.TestBaseTestCase, testtools.TestCase):
         """Test array performance function."""
         # Test get_array_keys.
         array_keys = self.perf.get_array_keys()
-        print(f"array keys {array_keys}")
         found_array = False
         for array in array_keys:
             self.assertIn(pc.SYMM_ID, array.keys())
@@ -745,7 +744,7 @@ class CITestPerformance(base.TestBaseTestCase, testtools.TestCase):
         outer_tag = pc.DIR_ID
         inner_tag = pc.PORT_ID
         inner_keys_func = self.perf.get_rdf_director_keys
-        outer_key_func = self.perf.get_rdf_port_kys
+        outer_key_func = self.perf.get_rdf_port_keys
         outer_metrics_func = self.perf.get_rdf_port_stats
         self.run_extended_input_performance_test_asserts(
             category, outer_tag, inner_tag, inner_keys_func, outer_key_func,
